@@ -1,0 +1,32 @@
+.merriweather {
+  font-family: "Merriweather", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+.merriweather-bold {
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.merriweather-bolder {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.pacifico {
+  font-family: "Pacifico", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.roboto-slab-base {
+  font-family: "Roboto Slab", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.ant-picker-calendar {
+  border: 2px solid #1890ff; /* Màu viền */
+  border-radius: 8px; /* Bo góc */
+  padding: 10px; /* Khoảng cách bên trong */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng */
+}
