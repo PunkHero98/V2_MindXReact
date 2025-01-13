@@ -7,25 +7,31 @@ import {
   Loading3QuartersOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons";
-import PropTypes from "prop-types";
 import moment from "moment";
 import {
   insertNote,
   updateNote,
   deleteNote,
+  getDepartment
 } from "../../services/apiHandle.js";
 import { useDispatch } from "react-redux";
-import { closeAddForm } from "../../features/toggleForm/toggleAddForm.js";
+import { closeAddForm , openAddForm } from "../../features/toggleForm/toggleAddForm.js";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
 const { confirm } = Modal;
 
-function AddModal({ onSave, note }) {
+function AddModal() {
+  const listCard = ["To do", "In Progress", "In Review", "Done"];
+
   const [id, setId] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [assignment, setAssignment] = useState("");
-  const [status, setStatus] = useState("To do");
+  const [status, setStatus] = useState(listCard[0]);
+
+  // const [note , setNote] = useState(null);
+  const [options, setOptions] = useState([]);
 
   const [check, setCheck] = useState("---");
   const [descriptNoti, setDescriptNoti] = useState("---");
@@ -40,45 +46,88 @@ function AddModal({ onSave, note }) {
   const dateState = dateNoti === "---";
   const assignState = assignNoti === "---";
 
-  const listCard = ["To do", "In Progress", "In Review", "Done"];
-
   const dispatch = useDispatch();
+  const note = useSelector(state => state.toggleAddForm.addFormStage)
+  const user = useSelector((state) => state.user.user);
   const handleCloseAdd = () => {
     dispatch(closeAddForm());
   };
+
   useEffect(() => {
-    if (note) {
-      setId(note["_id"] || null);
-      setTitle(note.title);
-      setDescription(note.description);
-      setAssignment(note.assignment);
-      setDate(note.date);
-      setStatus(note.status);
+    if (note.data) {
+      setId(note.data["_id"] || null);
+      setTitle(note.data.title);
+      setDescription(note.data.description);
+      setAssignment(note.data.assignment);
+      setDate(note.data.date);
+      setStatus(note.data.status);
     }
   }, [note]);
-  const renderSelectStatus = () => {
-    return [
-      ...listCard.map((f) => ({
-        label: <span>{f}</span>,
-        value: f,
-      })),
-    ];
-  };
-  const renderSelect = () => {
-    const users = JSON.parse(localStorage.getItem("selectUser"));
-    return [
-      ...users.map((f) => ({
-        label: <span>{f}</span>,
-        value: f,
-      })),
-    ];
-  };
 
+  // useEffect(() => {
+  //   if(note.state){
+  //     handleRenderSelect();
+  //   }
+  // } , [note.state])
+
+  function getUsernamesByDepartmentName(response, departmentName) {
+      const department = response.find((group) => group.name === departmentName);
+      if (department && department.member) {
+        return department.member
+          .filter((member) => member !== null) // Loại bỏ giá trị null
+          .map((member) => member.username); // Lấy danh sách username
+      }
+      return [];
+    }
+  const handleDepartment = async (name) => {
+      try {
+        const result = await getDepartment();
+        if (result.success === false) {
+          notification.error({
+            message: "Error when get data !",
+            description: result.message,
+            placement: "topRight",
+            duration: 1.5,
+          });
+          return null;
+        }
+        return getUsernamesByDepartmentName(result.data, name);
+      } catch (err) {
+        notification.error({
+          message: err.message,
+          description: "Please try it again later !",
+          placement: "topRight",
+          duration: 1.5,
+        });
+        return null;
+      }
+    };
+  const renderSelectStatus = () => {
+    return(listCard.map((f) => ({
+      label: <span>{f}</span>,
+      value: f,
+    })))
+
+  };
+  useEffect(() => {
+    fetchOptions(); // Gọi hàm khi component mount
+  }, [user.department]);
+
+  const fetchOptions = async () => {
+    const users = await handleDepartment(user.department);
+    setAssignment(users[0])
+    if (users) {
+      setOptions(
+        users.map((f) => ({
+          label: <span>{f}</span>,
+          value: f,
+        }))
+      );
+    }
+  };
   const handleSave = async () => {
     try {
-      const { user_id, username } = JSON.parse(
-        localStorage.getItem("currentUser")
-      );
+      const { user_id, username } = user;
       const updatedNote = {
         user_id,
         title,
@@ -90,17 +139,17 @@ function AddModal({ onSave, note }) {
       };
       const result = await insertNote(updatedNote);
       if (result.success === true) {
-        onSave();
-        setTitle("");
-        setDescription("");
-        setDate("");
-        setAssignment("");
-        setStatus("To do");
+        dispatch(openAddForm({state: false , isUpdate: true}));
         notification.success({
           message: "Success",
           placement: "topRight",
           duration: 1.5,
         });
+        setTitle("");
+        setDescription("");
+        setDate("");
+        setAssignment("");
+        setStatus("To do");
         setIsLoading(false);
         return;
       }
@@ -127,7 +176,7 @@ function AddModal({ onSave, note }) {
     try {
       const result = await deleteNote(id);
       if (result.success === true) {
-        onSave();
+        dispatch(openAddForm({state: false , isUpdate: true}));
         setTitle("");
         setDescription("");
         setDate("");
@@ -163,7 +212,7 @@ function AddModal({ onSave, note }) {
       const updatedNote = { title, description, assignment, date, status };
       const result = await updateNote(id, updatedNote);
       if (result.success === true) {
-        onSave();
+        dispatch(openAddForm({state: false , isUpdate: true}));
         setTitle("");
         setDescription("");
         setDate("");
@@ -231,9 +280,9 @@ function AddModal({ onSave, note }) {
     }
   };
 
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
+  // useEffect(() => {
+  //   console.log(status);
+  // }, [status]);
   const showDeleteConfirm = () => {
     confirm({
       title: "Are you sure delete this task?",
@@ -251,7 +300,7 @@ function AddModal({ onSave, note }) {
     });
   };
   return (
-    <div className="w-[700px] h-[600px] bg-white rounded-lg px-4 py-2 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[12] border-2 shadow-lg">
+    <div className="w-[700px] h-[600px] bg-white rounded-lg px-4 py-2 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[50] border-2 shadow-lg">
       <div className="first_row flex justify-between items-center mt-5">
         <div className=" w-fit p-1 rounded-xl border-2">
           <FlagFilled className="text-3xl text-green-400" />
@@ -349,8 +398,9 @@ function AddModal({ onSave, note }) {
             className="merriweather"
             status={!assignState && "error"}
             value={assignment}
+            loading={assignment == '' ? true : false}
             onChange={handleAssingment}
-            options={renderSelect()}
+            options={options}
           />
           <div
             className={`${
@@ -405,16 +455,5 @@ function AddModal({ onSave, note }) {
   );
 }
 
-AddModal.propTypes = {
-  onSave: PropTypes.func.isRequired,
-  note: PropTypes.shape({
-    _id: PropTypes.string,
-    title: PropTypes.string,
-    date: PropTypes.string,
-    description: PropTypes.string.isRequired,
-    assignment: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-  }),
-};
 
 export default AddModal;

@@ -1,3 +1,12 @@
+:root{
+  --bg-color: #1677ff;
+  --text-color: white;
+  --text-colorx: #1677ff;
+}
+.dark-mode {
+  --bg-color: black;
+  --text-color: white;
+}
 .merriweather {
   font-family: "Merriweather", serif;
   font-weight: 300;
@@ -29,4 +38,13 @@
   border-radius: 8px; /* Bo góc */
   padding: 10px; /* Khoảng cách bên trong */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng */
+}
+.overlay {
+  position: fixed; /* Cố định overlay trên màn hình */
+  top: 0;
+  left: 0;
+  width: 100%; /* Chiều rộng toàn màn hình */
+  height: 100%; /* Chiều cao toàn màn hình */
+  background-color: rgba(0, 0, 0, 0.7); /* Màu nền mờ (đen 50%) */
+  z-index: 10; /* Hiển thị lớp overlay trên các phần tử khác */
 }

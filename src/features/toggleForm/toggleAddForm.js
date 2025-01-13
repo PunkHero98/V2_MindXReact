@@ -8,8 +8,8 @@ const addFormToggleSlice = createSlice({
   name: "addFormToggle",
   initialState,
   reducers: {
-    openAddForm: (state) => {
-      state.addFormStage = true;
+    openAddForm: (state , action) => {
+      state.addFormStage = action.payload;
     },
     closeAddForm: (state) => {
       state.addFormStage = false;

@@ -10,7 +10,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log("Logging in:", action.payload);
       state.user = action.payload;
     },
     logout: (state) => {

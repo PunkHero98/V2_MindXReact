@@ -60,7 +60,7 @@ const Header = () => {
     navigate("/login");
   };
   const handleOpenAddForm = () => {
-    dispatch(openAddForm());
+    dispatch(openAddForm({state: true}));
   };
   const handleOpenCalendar = () => {
     dispatch(openCalendar());
@@ -113,7 +113,7 @@ const Header = () => {
       </div>
       <div className="navbar mb-8 rounded-full flex items-center  h-12">
         <Button
-          disabled={addFormToggleState}
+          disabled={addFormToggleState.state}
           onClick={handleOpenAddForm}
           variant={"solid"}
           color="primary"
@@ -126,13 +126,13 @@ const Header = () => {
           color="primary"
           className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
           onClick={handleOpenCalendar}
-          disabled={addFormToggleState}
+          disabled={addFormToggleState.state}
         >
           <span className="pacifico text-xl mr-1">Calendar</span>
           <CalendarTwoTone className="" twoToneColor={["#fffff", "#1677ff"]} />
         </Button>
         <Button
-          disabled={addFormToggleState}
+          disabled={addFormToggleState.state}
           onClick={() => {
             navigate("/manageuser");
           }}

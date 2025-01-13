@@ -3,7 +3,7 @@ import { login } from "../../features/auth/Login";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getUser } from "../../services/apiHandle";
-import { Button, Input, notification } from "antd";
+import { Button, Input, notification , Checkbox } from "antd";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
@@ -16,6 +16,8 @@ export default function Login() {
   const [usernameValue, setUsernameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+
+  // const [tartgetChecked , setTargetChecked] =useState(false);
 
   const [userNameNotification, setUserNameNotification] = useState("---");
   const [emailNotification, setEmailNotification] = useState("---");
@@ -33,39 +35,11 @@ export default function Login() {
     navigate("/");
   };
 
-  // function getUsernamesByDepartmentName(response, departmentName) {
-  //   const department = response.find((group) => group.name === departmentName);
-  //   if (department && department.member) {
-  //     return department.member
-  //       .filter((member) => member !== null) // Loại bỏ giá trị null
-  //       .map((member) => member.username); // Lấy danh sách username
-  //   }
-  //   return [];
-  // }
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+    // setTargetChecked(e.target.checked);
+  };
 
-  // const handleDepartment = async (name) => {
-  //   try {
-  //     const result = await getDepartment();
-  //     if (result.success === false) {
-  //       notification.error({
-  //         message: "Error when get data !",
-  //         description: result.message,
-  //         placement: "topRight",
-  //         duration: 1.5,
-  //       });
-  //       return null;
-  //     }
-  //     return getUsernamesByDepartmentName(result.data, name);
-  //   } catch (err) {
-  //     notification.error({
-  //       message: err.message,
-  //       description: "Please try it again later !",
-  //       placement: "topRight",
-  //       duration: 1.5,
-  //     });
-  //     return null;
-  //   }
-  // };
   const checkLogin = async () => {
     try {
       setIsLoading(true);
@@ -115,9 +89,11 @@ export default function Login() {
             department: user.department,
           };
           saveToReduxAndRedirect(userss);
+          // if(tartgetChecked){
+          //   localStorage.setItem("currentUser", JSON.stringify(userss));
+          // }
           // const selectUser = await handleDepartment(user.department);
           // localStorage.setItem("selectUser", JSON.stringify(selectUser));
-          // localStorage.setItem("currentUser", userss);
           setIsLoading(false);
           notification.success({
             message: "Login Successful",
@@ -241,6 +217,9 @@ export default function Login() {
             >
               <span>{passwordNotification}</span>
             </div>
+          </div>
+          <div className="ml-20 mt-[-1rem] w-full merriweather-bold">
+              <Checkbox onChange={onChange} >Remember me !</Checkbox>
           </div>
         </form>
         <div className=" btn_container flex justify-between w-full px-10 mt-7">

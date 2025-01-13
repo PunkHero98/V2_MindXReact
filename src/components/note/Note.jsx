@@ -3,7 +3,11 @@ import { BsPaperclip } from "react-icons/bs";
 import PropTypes from "prop-types"; // Import PropTypes
 import { ClockCircleOutlined, FlagTwoTone } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { useDispatch } from "react-redux";
+import { openAddForm } from "../../features/toggleForm/toggleAddForm";
+
 function Note({ items }) {
+  const dispatch = useDispatch();
   const cleanDate = new Date(
     items.date.replace(/(\d+)(st|nd|rd|th)/, "$1")
   ).getTime();
@@ -11,6 +15,9 @@ function Note({ items }) {
 
   const daysDifference = Math.floor((cleanDate - today) / 86400000);
 
+  const handleClick = () => {
+    dispatch(openAddForm({state: true , data: items }))
+  }
   const getFlagColors = () => {
     if (daysDifference < 0) return ["#ef4444", "#fecaca"];
     if (daysDifference <= 3) return ["#eab308", "#fde68a"];
@@ -27,10 +34,10 @@ function Note({ items }) {
   };
 
   return (
-    <div className="mt-4 bg-white px-4 rounded-lg">
+    <div className="mt-8 bg-white px-4 rounded-lg">
       <div className="top flex justify-between py-4">
         <h1 className="text-base merriweather-bolder">{items.title}</h1>
-        <LuPencilLine className="text-2xl" />
+        <LuPencilLine className="text-2xl" onClick={handleClick}/>
       </div>
       <div className="text_container mb-5 merriweather">
         <p>{items.description}</p>
