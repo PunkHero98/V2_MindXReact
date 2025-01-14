@@ -14,6 +14,23 @@ const getUser = async () => {
   }
 };
 
+const updateUser = async (id, user) => {
+  try {
+    const url = `/api/resources/users/${id}?apiKey=${apiKey}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(user),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return { success: true, data: data.data };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+};
+
 const insertNote = async (note) => {
   try {
     const url = `/api/resources/Note?apiKey=${apiKey}`;
@@ -134,4 +151,5 @@ export {
   getDepartment,
   addUser,
   updateDepartment,
+  updateUser,
 };

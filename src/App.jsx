@@ -24,7 +24,7 @@ function App() {
         }
       >
         <Route index element={<Home />} />
-        <Route path="account" element={<Account />} />
+        <Route path="account/:id" element={<Account />} />
         <Route path="manageuser" element={<ManageUser />} />
         <Route path="managenote" element={<ManageNote />} />
         <Route path="setting" element={<Setting />} />

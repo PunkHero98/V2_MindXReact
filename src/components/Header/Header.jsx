@@ -11,7 +11,7 @@ import { Button, Input, Space, Dropdown, Switch } from "antd";
 import {
   UserOutlined,
   CalendarTwoTone,
-  UserSwitchOutlined,
+  WechatOutlined,
   SunOutlined,
   MoonOutlined,
   HomeFilled,
@@ -27,12 +27,8 @@ const Header = () => {
   const navigate = useNavigate();
   const items = [
     {
-      label: <Link to={"/account"}>Account</Link>,
+      label: <Link to={`/account/${user.user_id}`}>Account</Link>,
       key: "0",
-    },
-    {
-      label: <Link to={"/setting"}>Setting</Link>,
-      key: "1",
     },
     {
       type: "divider",
@@ -60,7 +56,7 @@ const Header = () => {
     navigate("/login");
   };
   const handleOpenAddForm = () => {
-    dispatch(openAddForm({state: true}));
+    dispatch(openAddForm({ state: true }));
   };
   const handleOpenCalendar = () => {
     dispatch(openCalendar());
@@ -140,8 +136,8 @@ const Header = () => {
           color="primary"
           className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
         >
-          <span className="pacifico text-xl mr-1">Manage Users</span>
-          <UserSwitchOutlined />
+          <span className="pacifico text-xl mr-1">Chat App</span>
+          <WechatOutlined className="text-3xl" />
         </Button>
       </div>
     </div>
