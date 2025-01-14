@@ -7,7 +7,8 @@ import { openCalendar } from "../../features/toggleForm/toggleCalendar";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearchQuerry } from "../../features/search/searchQuerry";
-import { Button, Input, Space, Dropdown, Switch } from "antd";
+import { Button, Input, Space, Dropdown, Switch ,Avatar } from "antd";
+import { GrGamepad } from "react-icons/gr";
 import {
   UserOutlined,
   CalendarTwoTone,
@@ -16,6 +17,8 @@ import {
   MoonOutlined,
   HomeFilled,
 } from "@ant-design/icons";
+import { useState } from "react";
+import { useEffect } from "react";
 const { Search } = Input;
 const Header = () => {
   const dispatch = useDispatch();
@@ -25,6 +28,7 @@ const Header = () => {
     (state) => state.toggleAddForm.addFormStage
   );
   const navigate = useNavigate();
+  const [userImgUrl , setUserImgUrl] = useState(null);
   const items = [
     {
       label: <Link to={`/account/${user.user_id}`}>Account</Link>,
@@ -53,7 +57,7 @@ const Header = () => {
   };
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    // navigate("/login");
   };
   const handleOpenAddForm = () => {
     dispatch(openAddForm({ state: true }));
@@ -61,7 +65,9 @@ const Header = () => {
   const handleOpenCalendar = () => {
     dispatch(openCalendar());
   };
-
+  useEffect(() => {
+    setUserImgUrl(user.img_url)
+  }, [user.img_url])
   return (
     <div className="flex flex-col px-8">
       <div
@@ -94,9 +100,14 @@ const Header = () => {
             overlayClassName="w-[200px] "
           >
             <a onClick={(e) => e.preventDefault()}>
-              <Space className="border  bg-[#1677ff] text-white hover:bg-white hover:border-[#1677ff] hover:text-[#1677ff] p-2 rounded-md ">
+            {
+            userImgUrl ? <Avatar size={64} shape="square" src={user.img_url} className="cursor-pointer"/> 
+            :
+            <Space className="border  bg-[#1677ff] text-white hover:bg-white hover:border-[#1677ff] hover:text-[#1677ff] p-2 rounded-md ">
                 <UserOutlined className="text-2xl " />
               </Space>
+            }
+              
             </a>
           </Dropdown>
         </div>
@@ -138,6 +149,18 @@ const Header = () => {
         >
           <span className="pacifico text-xl mr-1">Chat App</span>
           <WechatOutlined className="text-3xl" />
+        </Button>
+        <Button
+          disabled={addFormToggleState.state}
+          onClick={() => {
+            navigate("/playground");
+          }}
+          variant="solid"
+          color="primary"
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+        >
+          <span className="pacifico text-xl mr-2">Play Ground</span>
+          <GrGamepad className="text-3xl" />
         </Button>
       </div>
     </div>

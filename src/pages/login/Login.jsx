@@ -87,6 +87,7 @@ export default function Login() {
             user_id: user["_id"],
             username: user.username,
             department: user.department,
+            img_url: user.img_url || null
           };
           saveToReduxAndRedirect(userss);
           // if(tartgetChecked){

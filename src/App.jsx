@@ -4,10 +4,14 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import HeaderLayout from "./layouts/HeaderLayout";
 import ManageNote from "./pages/manage/manageNote/ManageNote";
-import ManageUser from "./pages/manage/manageUser/ManageUser";
+import ChatApp from "./pages/manage/chatApp/ChatApp";
 import Account from "./pages/account/Account";
 import Setting from "./pages/setting/Setting";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import NotFound from "./pages/404Page/NotFound";
+import PlayGround from "./pages/playGround/PlayGround";
+import Chess from "./pages/playGround/game/Chess";
+import Caro from "./pages/playGround/game/Caro";
 import "./styles/App.css";
 
 function App() {
@@ -25,9 +29,14 @@ function App() {
       >
         <Route index element={<Home />} />
         <Route path="account/:id" element={<Account />} />
-        <Route path="manageuser" element={<ManageUser />} />
+        <Route path="manageuser" element={<ChatApp />} />
         <Route path="managenote" element={<ManageNote />} />
         <Route path="setting" element={<Setting />} />
+        <Route path="playground" element={<PlayGround />} >
+          <Route path="caro" element={<Caro />} />
+          <Route path="chess" element={<Chess />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

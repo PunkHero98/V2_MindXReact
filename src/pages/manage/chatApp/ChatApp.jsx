@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Input   } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
+import ChatContainer from '../../../components/chaterContainer/ChatContainer';
+import './chatApp.css'
 const ChatApp = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [ws, setWs] = useState(null);
-  // const [username, setUsername] = useState('User'); // Tên người dùng
+  const messagesEndRef = useRef(null); // Tạo ref cho container cuối cùng
 const user = useSelector(state => state.user.user);
 
 const username = user?.username || 'Guest';
@@ -56,6 +58,12 @@ const username = user?.username || 'Guest';
     };
   }, []);
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   const handleSendMessage = () => {
     if (ws && message) {
       // Tạo dữ liệu tin nhắn (bao gồm username và message)
@@ -84,13 +92,16 @@ const username = user?.username || 'Guest';
     }
   };
   return (
-    <div className='w-full h-[77vh] flex justify-between items-center'>
-      <div className='w-1/3 h-full outline outline-blue-500 my-2 mr-2 ml-8 rounded-lg'>
-
+    <div className='w-full h-[75vh] pb-4 flex justify-between items-center'>
+      <div className='w-1/3 h-full outline flex flex-col gap-4 px-4 py-8 overflow-y-scroll outline-blue-500 my-2 mr-2 ml-8 rounded-lg'>
+        <ChatContainer />
+        <ChatContainer />
+        <ChatContainer />
+        <ChatContainer />
       </div>
       <div className='w-full h-full flex flex-col justify-end pl-4 mr-8 outline rounded-lg outline-red-400'> 
         <div className='mb-10'>
-          <div style={{ maxHeight: '600px', overflowY: 'scroll' }}>
+          <div className='scroll-container' style={{ maxHeight: '600px', overflowY: 'scroll' }}>
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -98,25 +109,27 @@ const username = user?.username || 'Guest';
               >
                 {msg.username !== username ? (
                   <>
-                    <strong>{msg.username}: </strong>{msg.message}
+                    <div className={` ${msg.username !== username ? 'justify-start' : 'justify-end '} flex gap-3 mt-5 items-center`}>
+                      <img className='w-10 h-10 rounded-full' 
+                      src="https://res.cloudinary.com/dvntykgtk/image/upload/v1736853642/ulgvf3obw6jhlfprm7hf.jpg" alt="" />
+                      <strong>{msg.username}: </strong>{msg.message}
+                    </div>
                   </>
                 ) : (
                   <>
-                    {msg.message}: <strong>{msg.username}</strong>
+                    <div className={` ${msg.username !== username ? 'justify-start' : 'justify-end '} flex gap-3 mt-5 items-center`}>
+                        {msg.message}: <strong>{msg.username}</strong>
+                        <img className='w-10 h-10 rounded-full'
+                       src="https://res.cloudinary.com/dvntykgtk/image/upload/v1736853642/ulgvf3obw6jhlfprm7hf.jpg" alt="" />
+                    </div>
                   </>
                 )}
               </div>
             ))}
+            <div ref={messagesEndRef} /> 
           </div>
         </div>
         <div style={{ marginBottom: '10px' }} className='pr-4'>
-          {/* <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
-            style={{ width: '300px', padding: '10px', marginBottom: '10px' }}
-          /> */}
           <Input
             type="text"
             value={message}
