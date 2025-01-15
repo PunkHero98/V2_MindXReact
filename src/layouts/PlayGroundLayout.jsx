@@ -1,25 +1,63 @@
-import SliderTab from "../components/sliderTab/SliderTab";
-import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Menu } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { FaChess } from "react-icons/fa6";
+import { GiTicTacToe } from "react-icons/gi";
 const PlayGroundLayout = () => {
+  const [collapsed, setCollapsed] = useState(false); // Trạng thái thu nhỏ
+  const [activeTab, setActiveTab] = useState("/playground/caro"); // Tab mặc định
+  const navigate = useNavigate();
+
   const tabArray = [
-    { link: "/playground/caro", name: "Caro" },
-    { link: "/playground/chess", name: "Chess" },
+    { key: "/playground/caro", label: "Caro", icon: <GiTicTacToe/> },
+    { key: "/playground/chess", label: "Chess", icon: <FaChess  /> },
   ];
-  const tabClassName = "sliderTab w-full bg-stone-700 px-2  py-4";
+
+  const handleTabClick = (e) => {
+    const { key } = e;
+    navigate(key); // Điều hướng
+    setActiveTab(key); // Cập nhật trạng thái active
+  };
+
+  const handleCollapse = () => {
+    setCollapsed(!collapsed); // Đảo trạng thái thu nhỏ
+  };
+
   return (
-    <div className="w-full h-[75vh] flex px-8 justify-between rounded-lg">
-      <div className="slider flex flex-col outline outline-blue-300 w-1/12 rounded-l-lg bg-stone-400">
-        {tabArray.map((item, index) => (
-          <SliderTab
-            key={Date.now() + index}
-            className={tabClassName}
-            link={item.link}
-          >
-            {item.name}
-          </SliderTab>
-        ))}
+    <div className="w-full h-[76vh] flex px-8 justify-between rounded-lg">
+      {/* Slider Menu */}
+      <div
+        className={`slider transition-all duration-300 flex flex-col justify-between border border-[#1677ff] border-y-2 border-l-2 rounded-l-lg bg-[#000c17] ${
+          collapsed ? "flex-[0.05]" : "flex-[0.10]"
+        }`}
+      >
+        <Menu
+          mode="inline"
+          selectedKeys={[activeTab]}
+          onClick={handleTabClick}
+          inlineCollapsed={collapsed}
+          items={tabArray}
+          theme="dark"
+        />
+        <div
+          className="resizeBtn text-white text-xl rounded-lg flex items-center justify-center bg-[#1677ff] px-2 py-4 cursor-pointer"
+          onClick={handleCollapse}
+        >
+          <ArrowLeftOutlined
+            style={{
+              transform: collapsed ? "rotate(180deg)" : "rotate(0deg)",
+              transition: "transform 0.3s ease",
+            }}
+          />
+        </div>
       </div>
-      <div className="main w-11/12 outline outline-red-300">
+
+      {/* Main Content */}
+      <div
+        className="main border border-[#1677ff] border-y-2 border-r-2 rounded-r-lg transition-all duration-300"
+        style={{ flex: collapsed ? 0.95 : 0.90 }}
+      >
         <Outlet />
       </div>
     </div>

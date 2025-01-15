@@ -1,6 +1,9 @@
 .sliderTab {
   position: relative;
   display: inline-block;
+  transition: all 0.05s ease;
+color: white;
+cursor: pointer;
 }
 
 .sliderTab::after {
@@ -14,4 +17,13 @@
   border-bottom: 3px solid white;
   transform: rotate(-45deg);
   display: inline-block;
+}
+.sliderTab:hover {
+  background-color: #1677ff;
+  color: white;
+}
+
+.sliderTab.active {
+  background-color: #1677ff; /* Màu khi tab được chọn */
+  border-left: 4px solid #ffbe0b; /* Viền hiển thị trạng thái */
 }

@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 import "./SliderTab.css";
-const SliderTab = (props) => {
+import PropTypes from "prop-types";
+const SliderTab = ({ className, link, children, onClick }) => {
   return (
-    <div className={props.className}>
-      <Link to={props.link}>{props.children}</Link>
+    <div className={className} onClick={onClick}>
+      <Link className="pl-4" to={link}>{children}</Link>
     </div>
   );
 };
 
 export default SliderTab;
+
+SliderTab.propTypes = {
+  className: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+}
