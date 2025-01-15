@@ -1,0 +1,17 @@
+.sliderTab {
+  position: relative;
+  display: inline-block;
+}
+
+.sliderTab::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
+  transform: rotate(-45deg);
+  display: inline-block;
+}

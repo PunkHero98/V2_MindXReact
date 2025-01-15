@@ -7,7 +7,7 @@ import { openCalendar } from "../../features/toggleForm/toggleCalendar";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearchQuerry } from "../../features/search/searchQuerry";
-import { Button, Input, Space, Dropdown, Switch ,Avatar } from "antd";
+import { Button, Input, Space, Dropdown, Switch, Avatar } from "antd";
 import { GrGamepad } from "react-icons/gr";
 import {
   UserOutlined,
@@ -28,7 +28,7 @@ const Header = () => {
     (state) => state.toggleAddForm.addFormStage
   );
   const navigate = useNavigate();
-  const [userImgUrl , setUserImgUrl] = useState(null);
+  const [userImgUrl, setUserImgUrl] = useState(null);
   const items = [
     {
       label: <Link to={`/account/${user.user_id}`}>Account</Link>,
@@ -38,15 +38,7 @@ const Header = () => {
       type: "divider",
     },
     {
-      label: (
-        <Link
-          onClick={() => handleLogout()}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Logout
-        </Link>
-      ),
+      label: <Link onClick={() => handleLogout()}>Logout</Link>,
       key: "3",
     },
   ];
@@ -66,12 +58,12 @@ const Header = () => {
     dispatch(openCalendar());
   };
   useEffect(() => {
-    setUserImgUrl(user.img_url)
-  }, [user.img_url])
+    setUserImgUrl(user.img_url);
+  }, [user.img_url]);
   return (
     <div className="flex flex-col px-8">
       <div
-        className={` upperContainer flex justify-between items-center  py-10`}
+        className={` upperContainer flex justify-between items-center  py-8`}
       >
         <h1 className="pacifico text-3xl text-[#1677ff] cursor-default">
           Work Management System
@@ -100,14 +92,18 @@ const Header = () => {
             overlayClassName="w-[200px] "
           >
             <a onClick={(e) => e.preventDefault()}>
-            {
-            userImgUrl ? <Avatar size={64} shape="square" src={user.img_url} className="cursor-pointer"/> 
-            :
-            <Space className="border  bg-[#1677ff] text-white hover:bg-white hover:border-[#1677ff] hover:text-[#1677ff] p-2 rounded-md ">
-                <UserOutlined className="text-2xl " />
-              </Space>
-            }
-              
+              {userImgUrl ? (
+                <Avatar
+                  size={64}
+                  shape="square"
+                  src={user.img_url}
+                  className="cursor-pointer"
+                />
+              ) : (
+                <Space className="border  bg-[#1677ff] text-white hover:bg-white hover:border-[#1677ff] hover:text-[#1677ff] p-2 rounded-md ">
+                  <UserOutlined className="text-2xl " />
+                </Space>
+              )}
             </a>
           </Dropdown>
         </div>

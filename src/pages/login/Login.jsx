@@ -3,7 +3,7 @@ import { login } from "../../features/auth/Login";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getUser } from "../../services/apiHandle";
-import { Button, Input, notification , Checkbox } from "antd";
+import { Button, Input, notification, Checkbox } from "antd";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
@@ -87,7 +87,7 @@ export default function Login() {
             user_id: user["_id"],
             username: user.username,
             department: user.department,
-            img_url: user.img_url || null
+            img_url: user.img_url || null,
           };
           saveToReduxAndRedirect(userss);
           // if(tartgetChecked){
@@ -158,6 +158,7 @@ export default function Login() {
               Username
             </label>
             <Input
+              autoComplete="username"
               status={userNoti ? "" : "error"}
               id="usernameInput"
               value={usernameValue}
@@ -205,6 +206,7 @@ export default function Login() {
               status={passwordNoti ? "" : "error"}
               id="passwordInput"
               value={passwordValue}
+              autoComplete="current-password"
               onChange={(e) => setPasswordValue(e.target.value)}
               className={className}
               iconRender={(visible) =>
@@ -220,7 +222,7 @@ export default function Login() {
             </div>
           </div>
           <div className="ml-20 mt-[-1rem] w-full merriweather-bold">
-              <Checkbox onChange={onChange} >Remember me !</Checkbox>
+            <Checkbox onChange={onChange}>Remember me !</Checkbox>
           </div>
         </form>
         <div className=" btn_container flex justify-between w-full px-10 mt-7">
