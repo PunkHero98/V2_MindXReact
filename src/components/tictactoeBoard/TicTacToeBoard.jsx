@@ -1,75 +1,118 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { FaReact } from "react-icons/fa"; // Import icon React
+import Xmark from "../../assets/image/Xmark.png";
+import "./TicTacToeBoard.css";
 
 const TicTacToeBoard = () => {
-  const [boardSize, setBoardSize] = useState(10); // Kích thước bàn cờ (3x3 mặc định)
-  const [board, setBoard] = useState(
-    Array(boardSize)
-      .fill(null)
-      .map(() => Array(boardSize).fill(null))
-  );
-  const [currentPlayer, setCurrentPlayer] = useState("X");
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Vị trí hiện tại
+  const isDragging = useRef(false); // Trạng thái kéo
+  const startDragPos = useRef({ x: 0, y: 0 }); // Vị trí chuột khi bắt đầu kéo
+  const wasDragging = useRef(false); // Trạng thái gần đây có phải kéo chuột không
 
-  // Xử lý click vào ô
-  const handleCellClick = (row, col) => {
-    if (board[row][col] !== null) return; // Không cho phép ghi đè
-    const updatedBoard = board.map((r, rowIndex) =>
-      r.map((cell, colIndex) =>
-        rowIndex === row && colIndex === col ? currentPlayer : cell
-      )
-    );
-    setBoard(updatedBoard);
-    setCurrentPlayer(currentPlayer === "X" ? "O" : "X"); // Chuyển lượt
+  const [board, setBoard] = useState(
+    Array(20)
+      .fill(null)
+      .map(() => Array(20).fill(null))
+  );
+  const [currentUserSymbol, setCurrentUserSymbol] = useState("X");
+
+  const handleMouseDown = (e) => {
+    e.preventDefault(); // Ngăn chặn hành vi mặc định của trình duyệt
+    isDragging.current = true; // Bắt đầu kéo
+    wasDragging.current = false;
+    startDragPos.current = {
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    };
   };
 
-  // Cập nhật kích thước bàn cờ
-  const handleSizeChange = (size) => {
-    setBoardSize(size);
-    setBoard(
-      Array(size)
-        .fill(null)
-        .map(() => Array(size).fill(null))
+  const handleMouseMove = (e) => {
+    if (!isDragging.current) return;
+
+    const newX = e.clientX - startDragPos.current.x;
+    const newY = e.clientY - startDragPos.current.y;
+
+    setPosition({ x: newX, y: newY });
+    wasDragging.current = true;
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false; // Dừng kéo
+  };
+
+  const handleMouseLeave = () => {
+    isDragging.current = false; // Dừng kéo khi chuột rời khỏi khu vực
+  };
+
+  const handleClick = (row, col) => {
+    if (wasDragging.current) {
+      return; // Nếu đang kéo, không xử lý click
+    }
+
+    if (board[row][col] !== null) {
+      return;
+    }
+
+    const updateBoard = board.map((r, rowIndex) =>
+      r.map((cell, colIndex) =>
+        rowIndex === row && colIndex === col ? currentUserSymbol : cell
+      )
     );
+
+    setBoard(updateBoard);
+    setCurrentUserSymbol(currentUserSymbol === "X" ? "O" : "X");
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 ">
-      <h1 className="text-xl font-bold">Tic Tac Toe</h1>
-      {/* Thay đổi kích thước bàn cờ */}
-      <div className="mb-4">
-        <label className="mr-2">Board Size:</label>
-        <input
-          type="number"
-          min={3}
-          value={boardSize}
-          onChange={(e) => handleSizeChange(Number(e.target.value))}
-          className="border border-gray-400 p-1 rounded"
-        />
-      </div>
-      {/* Hiển thị bàn cờ */}
+    <div
+      className="w-full h-full relative overflow-hidden bg-gray-200 scroll-container"
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Vùng lớn hơn để kéo thả */}
       <div
-        className="grid"
+        className="absolute bg-white"
         style={{
-          gridTemplateColumns: `repeat(${boardSize}, 1fr)`,
-          gap: "1px",
+          transform: `translate(${position.x}px, ${position.y}px)`,
         }}
+        onMouseDown={handleMouseDown}
       >
-        {board.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-              className="w-12 h-12 border border-gray-800 flex items-center justify-center text-xl cursor-pointer hover:bg-gray-200"
-            >
-              {cell}
-            </div>
-          ))
-        )}
-      </div>
-      {/* Hiển thị người chơi hiện tại */}
-      <div className="mt-4">
-        <p>
-          Current Player: <span className="font-bold">{currentPlayer}</span>
-        </p>
+        {/* Nội dung */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(20, 1fr)`,
+          }}
+        >
+          {board.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => handleClick(rowIndex, colIndex)}
+                style={{
+                  height: "50px",
+                  width: "50px",
+                  border: "1px solid #000",
+                }}
+                className="cell"
+              >
+                {cell === "X" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    className="icon react-icon"
+                  >
+                    <path d="M24 3.752l-4.423-3.752-7.771 9.039-7.647-9.008-4.159 4.278c2.285 2.885 5.284 5.903 8.362 8.708l-8.165 9.447 1.343 1.487c1.978-1.335 5.981-4.373 10.205-7.958 4.304 3.67 8.306 6.663 10.229 8.006l1.449-1.278-8.254-9.724c3.287-2.973 6.584-6.354 8.831-9.245z" />
+                  </svg>
+                )}
+                {cell === "O" && <FaReact className="icon o-icon" />}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

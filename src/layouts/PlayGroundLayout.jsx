@@ -4,14 +4,15 @@ import { Menu } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { FaChess } from "react-icons/fa6";
 import { GiTicTacToe } from "react-icons/gi";
+import "./css/layout.css";
 const PlayGroundLayout = () => {
   const [collapsed, setCollapsed] = useState(false); // Trạng thái thu nhỏ
   const [activeTab, setActiveTab] = useState("/playground/caro"); // Tab mặc định
   const navigate = useNavigate();
 
   const tabArray = [
-    { key: "/playground/caro", label: "Caro", icon: <GiTicTacToe/> },
-    { key: "/playground/chess", label: "Chess", icon: <FaChess  /> },
+    { key: "/playground/caro", label: "Caro", icon: <GiTicTacToe /> },
+    { key: "/playground/chess", label: "Chess", icon: <FaChess /> },
   ];
 
   const handleTabClick = (e) => {
@@ -41,7 +42,7 @@ const PlayGroundLayout = () => {
           theme="dark"
         />
         <div
-          className="resizeBtn text-white text-xl rounded-lg flex items-center justify-center bg-[#1677ff] px-2 py-4 cursor-pointer"
+          className="resizeBtn scroll-container text-white text-xl rounded-lg flex items-center justify-center bg-[#1677ff] px-2 py-4 cursor-pointer"
           onClick={handleCollapse}
         >
           <ArrowLeftOutlined
@@ -55,8 +56,8 @@ const PlayGroundLayout = () => {
 
       {/* Main Content */}
       <div
-        className="main border border-[#1677ff] border-y-2 border-r-2 rounded-r-lg transition-all duration-300"
-        style={{ flex: collapsed ? 0.95 : 0.90 }}
+        className="main border border-[#1677ff] border-y-2 border-r-2 rounded-r-lg transition-all duration-300 "
+        style={{ flex: collapsed ? 0.95 : 0.9 }}
       >
         <Outlet />
       </div>

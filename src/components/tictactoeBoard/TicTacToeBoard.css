@@ -1,0 +1,18 @@
+.icon {
+    font-size: 36px;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .react-icon {
+    color: #61dafb; /* Màu xanh dương React */
+  }
+  
+  .o-icon {
+    color: #ff6347; /* Màu đỏ React */
+  }
+  
+  .cell:hover .icon {
+    transform: scale(1.4);
+    color: #ffd700; /* Màu vàng khi hover */
+  }
+  
