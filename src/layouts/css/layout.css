@@ -1,8 +1,8 @@
-.scroll-container {
+.scroll-container-game {
   -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
   scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
 }
 
-.scroll-container::-webkit-scrollbar {
+.scroll-container-game::-webkit-scrollbar {
   display: none; /* Ẩn thanh cuộn trên Chrome, Edge, Safari */
 }

@@ -1,18 +1,19 @@
-import { useState, useRef } from "react";
-import { FaReact } from "react-icons/fa"; // Import icon React
-import Xmark from "../../assets/image/Xmark.png";
+import { useState, useRef, useEffect } from "react";
 import "./TicTacToeBoard.css";
+import oIcon from "../../assets/image/o-3.svg";
+import xIcon from "../../assets/icons/tictactoeX.svg";
+import { throttle } from "lodash";
 
 const TicTacToeBoard = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 }); // Vị trí hiện tại
   const isDragging = useRef(false); // Trạng thái kéo
   const startDragPos = useRef({ x: 0, y: 0 }); // Vị trí chuột khi bắt đầu kéo
   const wasDragging = useRef(false); // Trạng thái gần đây có phải kéo chuột không
-
+  const [timeLeft, setTimeLeft] = useState(0); // 60 giây
   const [board, setBoard] = useState(
-    Array(20)
+    Array(100)
       .fill(null)
-      .map(() => Array(20).fill(null))
+      .map(() => Array(100).fill(null))
   );
   const [currentUserSymbol, setCurrentUserSymbol] = useState("X");
 
@@ -26,15 +27,17 @@ const TicTacToeBoard = () => {
     };
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = throttle((e) => {
     if (!isDragging.current) return;
 
     const newX = e.clientX - startDragPos.current.x;
     const newY = e.clientY - startDragPos.current.y;
 
-    setPosition({ x: newX, y: newY });
+    requestAnimationFrame(() => {
+      setPosition({ x: newX, y: newY });
+    });
     wasDragging.current = true;
-  };
+  }, 16);
 
   const handleMouseUp = () => {
     isDragging.current = false; // Dừng kéo
@@ -58,14 +61,33 @@ const TicTacToeBoard = () => {
         rowIndex === row && colIndex === col ? currentUserSymbol : cell
       )
     );
+    setTimeLeft(60);
 
     setBoard(updateBoard);
     setCurrentUserSymbol(currentUserSymbol === "X" ? "O" : "X");
   };
 
+  useEffect(() => {
+    if (timeLeft <= 0) return; // Dừng nếu hết giờ
+
+    const timerId = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timerId); // Xóa bộ đếm khi component bị unmount
+  }, [timeLeft]);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+  const checkWinner = () => {};
   return (
     <div
-      className="w-full h-full relative overflow-hidden bg-gray-200 scroll-container"
+      className="w-full h-full relative overflow-hidden scroll-container-caro bg-gray-200"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
@@ -81,8 +103,10 @@ const TicTacToeBoard = () => {
         {/* Nội dung */}
         <div
           style={{
+            zIndex: 100,
             display: "grid",
-            gridTemplateColumns: `repeat(20, 1fr)`,
+            gridTemplateColumns: `repeat(100, 1fr)`,
+            gap: 1.5,
           }}
         >
           {board.map((row, rowIndex) =>
@@ -93,26 +117,35 @@ const TicTacToeBoard = () => {
                 style={{
                   height: "50px",
                   width: "50px",
-                  border: "1px solid #000",
+                  border: "1px solid #fff",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                className="cell"
+                className="bg-blue-50 cellss"
               >
                 {cell === "X" && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="24"
-                    height="24"
-                    className="icon react-icon"
-                  >
-                    <path d="M24 3.752l-4.423-3.752-7.771 9.039-7.647-9.008-4.159 4.278c2.285 2.885 5.284 5.903 8.362 8.708l-8.165 9.447 1.343 1.487c1.978-1.335 5.981-4.373 10.205-7.958 4.304 3.67 8.306 6.663 10.229 8.006l1.449-1.278-8.254-9.724c3.287-2.973 6.584-6.354 8.831-9.245z" />
-                  </svg>
+                  <img src={xIcon} className="icon react-icon" alt="" />
                 )}
-                {cell === "O" && <FaReact className="icon o-icon" />}
+                {cell === "O" && (
+                  <img className="w-9 h-9 icon o-icon" src={oIcon} alt="" />
+                )}
               </div>
             ))
           )}
         </div>
+      </div>
+      <div className="w-full absolute bottom-0 bg-white h-10 bg-blue-400 ">
+        <div className="flex gap-5 justify-center items-center mt-1 text-white">
+          <div>
+            <span className="pacifico mr-5 text-xl">Player Turn:</span>
+            {currentUserSymbol}
+          </div>
+        </div>
+      </div>
+      <div className="absolute py-2 right-0 roboto-slab-base bg-blue-400 h-24 w-32 flex flex-col justify-around items-center text-white text-xl">
+        <h1 className="pacifico text-2xl">Timer</h1>
+        <h2>{formatTime(timeLeft)}</h2>
       </div>
     </div>
   );

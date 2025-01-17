@@ -149,7 +149,7 @@ const Header = () => {
         <Button
           disabled={addFormToggleState.state}
           onClick={() => {
-            navigate("/playground");
+            navigate("/playground/caro");
           }}
           variant="solid"
           color="primary"

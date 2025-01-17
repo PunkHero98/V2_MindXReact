@@ -42,7 +42,7 @@ const PlayGroundLayout = () => {
           theme="dark"
         />
         <div
-          className="resizeBtn scroll-container text-white text-xl rounded-lg flex items-center justify-center bg-[#1677ff] px-2 py-4 cursor-pointer"
+          className="resizeBtn text-white text-xl rounded-lg flex items-center justify-center bg-[#1677ff] px-2 py-4 cursor-pointer"
           onClick={handleCollapse}
         >
           <ArrowLeftOutlined
@@ -56,7 +56,7 @@ const PlayGroundLayout = () => {
 
       {/* Main Content */}
       <div
-        className="main border border-[#1677ff] border-y-2 border-r-2 rounded-r-lg transition-all duration-300 "
+        className="main border border-[#1677ff] scroll-container-game border-y-2 border-r-2 rounded-r-lg transition-all duration-300 "
         style={{ flex: collapsed ? 0.95 : 0.9 }}
       >
         <Outlet />

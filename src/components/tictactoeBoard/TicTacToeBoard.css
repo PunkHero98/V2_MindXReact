@@ -1,18 +1,26 @@
 .icon {
-    font-size: 36px;
-    transition: transform 0.3s ease, color 0.3s ease;
-  }
-  
-  .react-icon {
-    color: #61dafb; /* Màu xanh dương React */
-  }
-  
-  .o-icon {
-    color: #ff6347; /* Màu đỏ React */
-  }
-  
-  .cell:hover .icon {
-    transform: scale(1.4);
-    color: #ffd700; /* Màu vàng khi hover */
-  }
-  
+  font-size: 36px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.react-icon {
+  color: #61dafb; /* Màu xanh dương React */
+}
+
+.o-icon {
+  color: #ff6347; /* Màu đỏ React */
+}
+.cellss {
+  cursor: pointer;
+  transition: transform 0.7s ease, color 0.5s ease;
+}
+
+.cellss:hover {
+  transform: scale(1.4);
+  background: rgb(75, 126, 255);
+  z-index: 1000;
+}
+
+.scroll-container-caro > .absolute {
+  transition: transform 0.3s ease-out;
+}
