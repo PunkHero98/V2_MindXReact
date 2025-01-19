@@ -10,6 +10,7 @@ const TicTacToeBoard = () => {
   const startDragPos = useRef({ x: 0, y: 0 }); // Vị trí chuột khi bắt đầu kéo
   const wasDragging = useRef(false); // Trạng thái gần đây có phải kéo chuột không
   const [timeLeft, setTimeLeft] = useState(0); // 60 giây
+  const [gameOver, setGameOver] = useState(false);
   const [board, setBoard] = useState(
     Array(100)
       .fill(null)
@@ -48,6 +49,9 @@ const TicTacToeBoard = () => {
   };
 
   const handleClick = (row, col) => {
+    if(gameOver){
+      return;
+    }
     if (wasDragging.current) {
       return; // Nếu đang kéo, không xử lý click
     }
@@ -61,12 +65,67 @@ const TicTacToeBoard = () => {
         rowIndex === row && colIndex === col ? currentUserSymbol : cell
       )
     );
+    setBoard(updateBoard);
     setTimeLeft(60);
 
-    setBoard(updateBoard);
+
+    if (checkWin(updateBoard, row, col, currentUserSymbol)) {
+      alert(`${currentUserSymbol} wins!`);
+      // Bạn có thể thêm logic để kết thúc trò chơi ở đây
+      setGameOver(true);
+      return;
+    }
     setCurrentUserSymbol(currentUserSymbol === "X" ? "O" : "X");
   };
 
+  const checkWin = (board, row, col, symbol) => {
+    const directions = [
+      { dr: 0, dc: 1 },  // Hàng ngang
+      { dr: 1, dc: 0 },  // Hàng dọc
+      { dr: 1, dc: 1 },  // Đường chéo chính
+      { dr: 1, dc: -1 }  // Đường chéo phụ
+    ];
+  
+    const boardSize = board.length; // Kích thước bảng, giả sử là hình vuông
+    const inBounds = (r, c) => r >= 0 && c >= 0 && r < boardSize && c < boardSize;
+  
+    for (const { dr, dc } of directions) {
+      let count = 1;
+  
+      // Kiểm tra về phía trước
+      for (let step = 1; step < 5; step++) {
+        const newRow = row + dr * step;
+        const newCol = col + dc * step;
+  
+        if (inBounds(newRow, newCol) && board[newRow][newCol] === symbol) {
+          count++;
+        } else {
+          break;
+        }
+      }
+  
+      // Kiểm tra về phía ngược lại
+      for (let step = 1; step < 5; step++) {
+        const newRow = row - dr * step;
+        const newCol = col - dc * step;
+  
+        if (inBounds(newRow, newCol) && board[newRow][newCol] === symbol) {
+          count++;
+        } else {
+          break;
+        }
+      }
+  
+      // Nếu có đủ 5 ký hiệu liên tiếp, trả về true
+      if (count >= 5) {
+        return true;
+      }
+    }
+  
+    // Nếu không tìm thấy chuỗi 5 ký hiệu, trả về false
+    return false;
+  };
+  
   useEffect(() => {
     if (timeLeft <= 0) return; // Dừng nếu hết giờ
 
@@ -84,7 +143,6 @@ const TicTacToeBoard = () => {
       .toString()
       .padStart(2, "0")}`;
   };
-  const checkWinner = () => {};
   return (
     <div
       className="w-full h-full relative overflow-hidden scroll-container-caro bg-gray-200"
@@ -135,7 +193,7 @@ const TicTacToeBoard = () => {
           )}
         </div>
       </div>
-      <div className="w-full absolute bottom-0 bg-white h-10 bg-blue-400 ">
+      <div className="w-full absolute bottom-0  h-10 bg-blue-600 ">
         <div className="flex gap-5 justify-center items-center mt-1 text-white">
           <div>
             <span className="pacifico mr-5 text-xl">Player Turn:</span>
@@ -143,7 +201,7 @@ const TicTacToeBoard = () => {
           </div>
         </div>
       </div>
-      <div className="absolute py-2 right-0 roboto-slab-base bg-blue-400 h-24 w-32 flex flex-col justify-around items-center text-white text-xl">
+      <div className="absolute py-2 right-0 roboto-slab-base bg-blue-600 h-24 w-32 flex flex-col justify-around items-center text-white text-xl">
         <h1 className="pacifico text-2xl">Timer</h1>
         <h2>{formatTime(timeLeft)}</h2>
       </div>
