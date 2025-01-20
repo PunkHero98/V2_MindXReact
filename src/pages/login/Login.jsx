@@ -3,11 +3,13 @@ import { login } from "../../features/auth/Login";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getUser } from "../../services/apiHandle";
-import { Button, Input, notification, Checkbox } from "antd";
+import { Button, Input, notification, Checkbox, Divider } from "antd";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   Loading3QuartersOutlined,
+  FacebookFilled,
+  GoogleOutlined,
 } from "@ant-design/icons";
 export default function Login() {
   const dispatch = useDispatch();
@@ -139,7 +141,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-stone-300 ">
-      <div className="main py-6 bg-white h-2/3 w-1/3 border-2 rounded-xl border-stone-300 flex flex-col items-center justify-between">
+      <div className="main py-6 bg-white h-3/4 w-1/3 border-2 rounded-xl border-stone-300 flex flex-col items-center justify-between">
         <div className="head mb-4 flex flex-col text-center gap-6 ">
           <h1 className="text-4xl mt-10 pacifico text-[#1677ff]">
             Work Management System
@@ -244,6 +246,23 @@ export default function Login() {
             disabled={isLoading}
           >
             {!isLoading ? "Login" : <Loading3QuartersOutlined spin />}
+          </Button>
+        </div>
+        <div className="w-full px-10">
+          <Divider style={{ borderColor: "#1677ff" }}>
+            <span className="text-blue-300">Or</span>
+          </Divider>
+        </div>
+        <div className="w-full px-40 flex justify-around ">
+          <Button className="merriweather h-12" variant="solid" color="lime">
+            Login With <GoogleOutlined className="text-xl" />
+          </Button>
+          <Button
+            className="merriweather h-12"
+            variant="solid"
+            color="geekblue"
+          >
+            Login With <FacebookFilled className="text-xl" />
           </Button>
         </div>
       </div>
