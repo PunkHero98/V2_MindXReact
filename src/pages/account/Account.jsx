@@ -401,7 +401,7 @@ const Account = () => {
           </div>
         }
       >
-        <div className="mt-8">
+        <div className="mt-8 ">
           <img src={prevImgUrl} alt="" />
         </div>
       </Modal>

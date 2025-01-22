@@ -5,11 +5,11 @@ import xIcon from "../../assets/icons/tictactoeX.svg";
 import { throttle } from "lodash";
 
 const TicTacToeBoard = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // Vị trí hiện tại
-  const isDragging = useRef(false); // Trạng thái kéo
-  const startDragPos = useRef({ x: 0, y: 0 }); // Vị trí chuột khi bắt đầu kéo
-  const wasDragging = useRef(false); // Trạng thái gần đây có phải kéo chuột không
-  const [timeLeft, setTimeLeft] = useState(0); // 60 giây
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const startDragPos = useRef({ x: 0, y: 0 });
+  const wasDragging = useRef(false);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [board, setBoard] = useState(
     Array(100)
@@ -19,8 +19,8 @@ const TicTacToeBoard = () => {
   const [currentUserSymbol, setCurrentUserSymbol] = useState("X");
 
   const handleMouseDown = (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của trình duyệt
-    isDragging.current = true; // Bắt đầu kéo
+    e.preventDefault();
+    isDragging.current = true;
     wasDragging.current = false;
     startDragPos.current = {
       x: e.clientX - position.x,
@@ -41,19 +41,19 @@ const TicTacToeBoard = () => {
   }, 16);
 
   const handleMouseUp = () => {
-    isDragging.current = false; // Dừng kéo
+    isDragging.current = false;
   };
 
   const handleMouseLeave = () => {
-    isDragging.current = false; // Dừng kéo khi chuột rời khỏi khu vực
+    isDragging.current = false;
   };
 
   const handleClick = (row, col) => {
-    if(gameOver){
+    if (gameOver) {
       return;
     }
     if (wasDragging.current) {
-      return; // Nếu đang kéo, không xử lý click
+      return;
     }
 
     if (board[row][col] !== null) {
@@ -68,10 +68,8 @@ const TicTacToeBoard = () => {
     setBoard(updateBoard);
     setTimeLeft(60);
 
-
     if (checkWin(updateBoard, row, col, currentUserSymbol)) {
       alert(`${currentUserSymbol} wins!`);
-      // Bạn có thể thêm logic để kết thúc trò chơi ở đây
       setGameOver(true);
       return;
     }
@@ -80,60 +78,57 @@ const TicTacToeBoard = () => {
 
   const checkWin = (board, row, col, symbol) => {
     const directions = [
-      { dr: 0, dc: 1 },  // Hàng ngang
-      { dr: 1, dc: 0 },  // Hàng dọc
-      { dr: 1, dc: 1 },  // Đường chéo chính
-      { dr: 1, dc: -1 }  // Đường chéo phụ
+      { dr: 0, dc: 1 },
+      { dr: 1, dc: 0 },
+      { dr: 1, dc: 1 },
+      { dr: 1, dc: -1 },
     ];
-  
-    const boardSize = board.length; // Kích thước bảng, giả sử là hình vuông
-    const inBounds = (r, c) => r >= 0 && c >= 0 && r < boardSize && c < boardSize;
-  
+
+    const boardSize = board.length;
+
+    const inBounds = (r, c) =>
+      r >= 0 && c >= 0 && r < boardSize && c < boardSize;
+
     for (const { dr, dc } of directions) {
       let count = 1;
-  
-      // Kiểm tra về phía trước
       for (let step = 1; step < 5; step++) {
         const newRow = row + dr * step;
         const newCol = col + dc * step;
-  
+
         if (inBounds(newRow, newCol) && board[newRow][newCol] === symbol) {
           count++;
         } else {
           break;
         }
       }
-  
-      // Kiểm tra về phía ngược lại
+
       for (let step = 1; step < 5; step++) {
         const newRow = row - dr * step;
         const newCol = col - dc * step;
-  
+
         if (inBounds(newRow, newCol) && board[newRow][newCol] === symbol) {
           count++;
         } else {
           break;
         }
       }
-  
-      // Nếu có đủ 5 ký hiệu liên tiếp, trả về true
+
       if (count >= 5) {
         return true;
       }
     }
-  
-    // Nếu không tìm thấy chuỗi 5 ký hiệu, trả về false
+
     return false;
   };
-  
+
   useEffect(() => {
-    if (timeLeft <= 0) return; // Dừng nếu hết giờ
+    if (timeLeft <= 0) return;
 
     const timerId = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
-    return () => clearInterval(timerId); // Xóa bộ đếm khi component bị unmount
+    return () => clearInterval(timerId);
   }, [timeLeft]);
 
   const formatTime = (time) => {
@@ -150,7 +145,6 @@ const TicTacToeBoard = () => {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Vùng lớn hơn để kéo thả */}
       <div
         className="absolute bg-white"
         style={{
@@ -158,7 +152,6 @@ const TicTacToeBoard = () => {
         }}
         onMouseDown={handleMouseDown}
       >
-        {/* Nội dung */}
         <div
           style={{
             zIndex: 100,
