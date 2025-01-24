@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   Upload,
@@ -31,6 +31,12 @@ const Account = () => {
   const [openModalForPrevImgs, setOpenModalForPrevImgs] = useState(false);
   const [prevImgUrl, setPrevImgUrl] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const containerRef = useRef(null);
+  const [scale, setScale] = useState(1); // Mức zoom ban đầu
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Vị trí hình ảnh
+  const [isDragging, setIsDragging] = useState(false); // Trạng thái kéo
+  const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
 
   const [loadingForUpdatePic, setLoadingForUpdatePic] = useState(false);
   const [loadingForDeletePic, setLoadingForDeletePic] = useState(false);
@@ -241,6 +247,39 @@ const Account = () => {
       });
     }
   };
+
+  const handleWheel = (event) => {
+    event.preventDefault();
+    const zoomSpeed = 0.1; // Tốc độ zoom
+    const newScale =
+      event.deltaY < 0 ? scale + zoomSpeed : Math.max(0.5, scale - zoomSpeed); // Giới hạn zoom nhỏ nhất là 0.5
+    setScale(newScale);
+  };
+
+  // Bắt đầu kéo
+  const handleMouseDown = (event) => {
+    setIsDragging(true);
+    setLastMousePosition({ x: event.clientX, y: event.clientY });
+  };
+
+  // Kéo hình ảnh
+  const handleMouseMove = (event) => {
+    if (!isDragging) return;
+
+    const deltaX = (event.clientX - lastMousePosition.x) / scale; // Điều chỉnh theo tỷ lệ zoom
+    const deltaY = (event.clientY - lastMousePosition.y) / scale;
+
+    setPosition((prev) => ({
+      x: prev.x + deltaX,
+      y: prev.y + deltaY,
+    }));
+
+    setLastMousePosition({ x: event.clientX, y: event.clientY });
+  };
+
+  // Kết thúc kéo
+  const handleMouseUp = () => setIsDragging(false);
+
   return (
     <>
       <div className="flex w-full h-min-[500px] justify-between px-8">
@@ -358,8 +397,25 @@ const Account = () => {
         footer={null}
         onCancel={() => setOpenModal(false)}
       >
-        <div className="mt-8">
-          <img src={imageUrl} />
+        <div
+          ref={containerRef}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={() => setIsDragging(false)}
+          className="mt-8 relative overflow-hidden w-full h-[400px] cursor-grab active:cursor-grabbing "
+        >
+          <img
+            src={imageUrl}
+            draggable="false"
+            alt=""
+            style={{
+              transform: `scale(${scale}) translate(${position.x}px, ${position.y}px)`,
+              transformOrigin: "center",
+            }}
+            className="absolute top-0 left-0 transition-transform duration-50 ease-out"
+          />
         </div>
       </Modal>
 
@@ -402,7 +458,7 @@ const Account = () => {
         }
       >
         <div className="mt-8 ">
-          <img src={prevImgUrl} alt="" />
+          <img src={prevImgUrl} />
         </div>
       </Modal>
       <Modal
