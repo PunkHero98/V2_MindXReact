@@ -16,6 +16,8 @@ import {
   SunOutlined,
   MoonOutlined,
   HomeFilled,
+  GlobalOutlined,
+  FundOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -40,6 +42,17 @@ const Header = () => {
     {
       label: <Link onClick={() => handleLogout()}>Logout</Link>,
       key: "3",
+    },
+  ];
+
+  const language = [
+    {
+      label: "English",
+      key: "0",
+    },
+    {
+      label: "Vietnamese",
+      key: "1",
     },
   ];
   const handleSearch = (e) => {
@@ -107,6 +120,13 @@ const Header = () => {
             </a>
           </Dropdown>
         </div>
+        <Dropdown
+          menu={{ items: language }}
+          trigger={["click"]}
+          overlayClassName="w-[100px]"
+        >
+          <GlobalOutlined className="cursor-pointer text-3xl text-blue-500" />
+        </Dropdown>
         <Switch
           className="px-2"
           checkedChildren={<SunOutlined />}
@@ -123,6 +143,15 @@ const Header = () => {
           className={` addNew pacifico rounded-l-3xl rounded-r-xl h-12 text-xl  `}
         >
           Add New
+        </Button>
+        <Button
+          variant="solid"
+          color="primary"
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          onClick={() => navigate("dashboard")}
+        >
+          <span className="pacifico text-xl mr-1">Dash Board</span>
+          <FundOutlined className="text-2xl" />
         </Button>
         <Button
           variant="solid"

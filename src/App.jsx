@@ -12,6 +12,7 @@ import NotFound from "./pages/404Page/NotFound";
 import PlayGroundLayout from "./layouts/PlayGroundLayout";
 import Chess from "./pages/playGround/game/Chess";
 import Caro from "./pages/playGround/game/Caro";
+import DashBoard from "./pages/dashboard/DashBoard";
 import "./styles/App.css";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         }
       >
         <Route index element={<Home />} />
+        <Route path="dashboard" element={<DashBoard />} />
         <Route path="account/:id" element={<Account />} />
         <Route path="manageuser" element={<ChatApp />} />
         <Route path="managenote" element={<ManageNote />} />
