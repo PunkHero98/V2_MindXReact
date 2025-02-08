@@ -388,6 +388,8 @@ export default function Register() {
         department: deparment,
         role: "Member",
         history_imgs: [null],
+        isActive: false,
+        createAt: Date.now()
       };
       handleAddUser(data);
       return;

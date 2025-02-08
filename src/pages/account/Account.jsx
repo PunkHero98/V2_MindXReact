@@ -163,25 +163,22 @@ const Account = () => {
   }, [id]);
 
   const renderFields = () => {
-    return Object.keys(userData)
-      .filter(
-        (key) =>
-          key !== "password" &&
-          key !== "img_url" &&
-          key !== "history_imgs" &&
-          key !== "hitory_imgs"
-      )
+    const allowedKeys = ["username", "role", "_id", "email", "department"]; // Chỉ hiển thị các key này
+  
+    return allowedKeys
+      .filter((key) => key in userData) // Kiểm tra xem key có tồn tại trong userData không
       .map((key, index) => (
         <div key={index}>
           <label className="merriweather text-base">
             {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
           </label>
-          <Paragraph copyable className=" mt-2 roboto-slab-base">
+          <Paragraph copyable className="mt-2 roboto-slab-base">
             {userData[key]}
           </Paragraph>
         </div>
       ));
   };
+  
   const handleOpenModal = () => {
     setOpenModal(true);
   };

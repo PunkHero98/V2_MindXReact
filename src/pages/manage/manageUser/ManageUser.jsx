@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Table, Space, Tag, Input } from "antd";
+import { Table, Space, Tag, Input, Button } from "antd";
 import { getUser } from "../../../services/apiHandle";
 import { debounce, uniqBy } from "lodash";
 import { Typography } from "antd";
-
+import dayjs from "dayjs";
+const {Paragraph} = Typography;
 const ManageUser = () => {
   const [data, setData] = useState([]);
   const [usernameFilters, setUsernameFilters] = useState([]); // Lưu filters động
@@ -31,7 +32,12 @@ const ManageUser = () => {
       id: item._id,
       department: [item.department],
       role: item.role,
-      status: item.status,
+      status: [
+        item.isActive ? "Actived" : "Deactived",
+        item.password === "Pa55w0rd@" ? "defaut Password" : null
+      ].filter(Boolean),
+      createddate: item.createAt ? dayjs(item.createAt).format("MMM-DD-YYYY HH:mm:ss") : "N/A",
+      createdtimestamp: item.createAt ? dayjs(item.createAt).valueOf() : 0,
     }));
 
     setData(newData);
@@ -48,7 +54,7 @@ const ManageUser = () => {
   const [searchText, setSearchText] = useState("");
   const handleSearch = debounce((e) => {
     setSearchText(e.target.value.toLowerCase());
-  }, 300); // Giảm tải tìm kiếm bằng debounce
+  }, 300);
 
   const columns = [
     {
@@ -74,6 +80,11 @@ const ManageUser = () => {
       title: "Id",
       dataIndex: "id",
       key: "id",
+      render: (text) =>(
+        <Space >
+          <Paragraph copyable  >{text}</Paragraph>
+        </Space>
+      )
     },
     {
       title: "Department",
@@ -113,21 +124,60 @@ const ManageUser = () => {
       title: "Status",
       key: "status",
       dataIndex: "status",
+      render: (_, { status }) => (
+        <>
+          {(status || []).map((tag) => {
+            let color = tag === 'Actived' ? 'geekblue' : 'volcano';
+            if (tag === "defaut Password") color = "orange";
+            return (
+              <Tag color={color} key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
     },
     {
       title: "Action",
       key: "action",
-      render: () => (
-        <Space size="middle">
-          <a>Reset Password</a>
-          <a>Deactivated</a>
-        </Space>
-      ),
+      render: (_, { status }) => {
+        const hasDefaultPassword = status.includes("defaut Password");
+        const isActive = status.includes("Actived");
+    
+        return (
+          <Space direction="horizontal" align="center">
+            {/* Nút Reset Password (Disable nếu có 'defaut Password') */}
+            <Button size="small" disabled={hasDefaultPassword} color="purple" variant="outlined">
+              Reset Password
+            </Button>
+    
+            {/* Nút Deactivated / Activated (Tùy theo trạng thái) */}
+            {isActive ? (
+              <Button size="small" color="danger" variant="outlined">
+                Deactivated
+              </Button>
+            ) : (
+              <Button size="small" color="blue" variant="outlined">
+                Actived
+              </Button>
+            )}
+          </Space>
+        );
+      },
+    },    
+    {
+      title: "Created Date",
+      key: "createddate",
+      dataIndex: "createddate",
+      render: (text) => <span>{text}</span>, // Hiển thị "N/A" nếu không có ngày tạo
+      sorter: (a, b) => a.createdtimestamp - b.createdtimestamp,
     },
+    
   ];
-  const filteredData = data.filter((user) =>
-    user.username.toLowerCase().includes(searchText)
-  );
+  // const filteredData = data.filter((user) =>
+  //   user.username.toLowerCase().includes(searchText)
+  // );
 
   return (
     <div className="px-8">
@@ -136,20 +186,23 @@ const ManageUser = () => {
         <Input
           placeholder="Search username..."
           onChange={handleSearch}
-          style={{ marginBottom: 10, width: 250 }}
+          style={{  width: 250 }}
         />
-        <Typography.Title className="roboto-slab-base" level={4}>
+        {/* <Typography.Title className="roboto-slab-base" level={4}>
           Number Of User: {filteredData.length}
-        </Typography.Title>
+        </Typography.Title> */}
       </div>
 
       {/* 🔹 Hiển thị bảng dữ liệu */}
       <Table
+      
         columns={columns}
         dataSource={data.filter((user) =>
           user.username.toLowerCase().includes(searchText)
         )}
-        scroll={{ x: "max-content" }} // 🔹 Hỗ trợ kéo ngang nếu nhiều cột
+        className="roboto-slab-base"
+        scroll={{ x: "max-content"  }} // 🔹 Hỗ trợ kéo ngang nếu nhiều cột
+        pagination = {{pageSize: 8 , showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} users`,}}
       />
     </div>
   );
