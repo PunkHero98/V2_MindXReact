@@ -10,18 +10,17 @@ import {
   Empty,
   Button,
   Skeleton,
+  Avatar,
 } from "antd";
-import { UserOutlined} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { getUser, updateUser } from "../../services/apiHandle";
+import ChangePassWord from "../../components/changePassWord/ChangePassWord";
 import { login } from "../../features/auth/Login";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { Avatar , Input } from "antd";
 
 const { Paragraph } = Typography;
 const Account = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-
   const [userData, setUserData] = useState([]);
 
   const { id } = useParams();
@@ -34,13 +33,6 @@ const Account = () => {
   const [openModalForPrevImgs, setOpenModalForPrevImgs] = useState(false);
   const [prevImgUrl, setPrevImgUrl] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [changePassShow , setChangePassShow] = useState(false);
-
-  const [oldPassword , setOldPassword] = useState(null);
-  const [newPassword , setNewPassword] = useState(null);
-  const [confirmNewPassword , setConfirmNewPassword] = useState(null);
-
-  const [statusForOldPass , setStatusForOldPass] = useState(true);
 
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1); // Mức zoom ban đầu
@@ -174,7 +166,10 @@ const Account = () => {
     return Object.keys(userData)
       .filter(
         (key) =>
-          key !== "password" && key !== "img_url" && key !== "history_imgs" && key !== 'hitory_imgs'
+          key !== "password" &&
+          key !== "img_url" &&
+          key !== "history_imgs" &&
+          key !== "hitory_imgs"
       )
       .map((key, index) => (
         <div key={index}>
@@ -290,28 +285,8 @@ const Account = () => {
   // Kết thúc kéo
   const handleMouseUp = () => setIsDragging(false);
 
-  const handleChangePassword = () =>{
-    if(!changePassShow){
-      setChangePassShow(true);
-      return ;
-    }
-
-  }
-  const handleBlurChangePass = () =>{
-    if(!(oldPassword === userData['password'])){
-      setStatusForOldPass(false);
-      messageApi.open({
-        type: 'error',
-        content: 'Your old password is incorrect',
-      });
-      return;
-    }
-    setStatusForOldPass(true);
-  }
-
   return (
     <>
-    {contextHolder}
       <div className="flex w-full h-min-[500px] justify-between px-8">
         <div className="img_area w-1/4 flex flex-col items-center justify-between py-8">
           <div className="w-44 h-44 mb-4 border border-gray-300 rounded-lg flex justify-center items-center bg-gray-100">
@@ -413,25 +388,8 @@ const Account = () => {
             </div>
             {!loadingSkeleton ? (
               <div className="grid grid-cols-2 gap-6 px-4 py-4">
-                <div className=" grid grid-cols-2 gap-6">
-                  {renderFields()}
-                </div>
-                <div className={`flex flex-col ${changePassShow ? 'justify-between': 'justify-center'} items-center`}>
-                  <div className={`${changePassShow ? '' : 'hidden'} flex flex-col gap-4 w-full`}>
-                     <Input.Password size="large" placeholder="Enter your old password" onChange={(e) =>setOldPassword(e.target.value)} value={oldPassword} status={statusForOldPass ? '' : 'error'} onBlur={handleBlurChangePass} />
-                     <Input.Password size="large" placeholder="Enter your new password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-                     <Input size="large" placeholder="Confirm your new password" type="password" onChange={(e)=>setConfirmNewPassword(e.target.value)} value={confirmNewPassword} />
-                  </div>
-                  <div className={`flex ${changePassShow ? 'justify-between' : 'justify-center'} gap-12 items-center`}>
-                  <Button variant="outlined" color="danger" onClick={()=>{
-                    setChangePassShow(false);
-                    setOldPassword('');
-                    setNewPassword('');
-                    setConfirmNewPassword('');
-                  }} className={`${changePassShow? '': 'hidden'} pacifico px-4 py-6 mb-2 text-xl`}>Cancel</Button>
-                  <Button variant="solid" color="blue" className="pacifico px-4 py-6 mb-2 text-xl" onClick={handleChangePassword}>Change Password</Button>
-                  </div>
-                </div>
+                <div className=" grid grid-cols-2 gap-6">{renderFields()}</div>
+                <ChangePassWord userData={userData} />
               </div>
             ) : (
               <Skeleton active className="mt-10 px-4" />

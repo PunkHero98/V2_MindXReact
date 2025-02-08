@@ -13,6 +13,7 @@ import PlayGroundLayout from "./layouts/PlayGroundLayout";
 import Chess from "./pages/playGround/game/Chess";
 import Caro from "./pages/playGround/game/Caro";
 import DashBoard from "./pages/dashboard/DashBoard";
+import ManageUser from "./pages/manage/manageUser/ManageUser";
 import "./styles/App.css";
 
 function App() {
@@ -31,8 +32,9 @@ function App() {
         <Route index element={<Home />} />
         <Route path="dashboard" element={<DashBoard />} />
         <Route path="account/:id" element={<Account />} />
-        <Route path="manageuser" element={<ChatApp />} />
+        <Route path="chatapp" element={<ChatApp />} />
         <Route path="managenote" element={<ManageNote />} />
+        <Route path="manage_user" element={<ManageUser />} />
         <Route path="setting" element={<Setting />} />
         <Route path="playground" element={<PlayGroundLayout />}>
           <Route path="caro" element={<Caro />} />

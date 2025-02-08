@@ -387,6 +387,7 @@ export default function Register() {
         password: confirmPass,
         department: deparment,
         role: "Member",
+        history_imgs: [null],
       };
       handleAddUser(data);
       return;
@@ -402,9 +403,9 @@ export default function Register() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-stone-300">
+    <div className="flex justify-center items-center h-screen bg-sky-100">
       <div
-        className="p-6  bg-white h-4/5 w-1/2 border-2 rounded-xl border-stone-300 flex flex-col items-center justify-between"
+        className="p-6  bg-white h-4/5 w-1/2 border-2 rounded-xl shadow-xl shadow-slate-400 flex flex-col items-center justify-between"
         onKeyDown={handleKeyDown}
       >
         <div className="top w-full flex flex-col">
@@ -446,6 +447,7 @@ export default function Register() {
                   />
                 )
               }
+              disabled={isLoading}
               onBlur={handleBlurOnuserName}
             />
             <Typography.Paragraph
@@ -480,6 +482,7 @@ export default function Register() {
                   />
                 )
               }
+              disabled={isLoading}
               onBlur={handleBlurOnEmail}
             />
             <Typography.Paragraph
@@ -504,6 +507,7 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyUp={onTypingPassWord}
+              disabled={isLoading}
             />
             <Typography.Paragraph
               className={`${passState && "opacity-0"} merriweather mt-1`}
@@ -527,6 +531,7 @@ export default function Register() {
               value={confirmPass}
               onKeyUp={onTypingConfirm}
               onChange={(e) => setConfirmPass(e.target.value)}
+              disabled={isLoading}
             />
             <Typography.Paragraph
               className={`${confirmState && "opacity-0"} merriweather mt-1`}
@@ -555,6 +560,7 @@ export default function Register() {
               onChange={handleAssingment}
               loading={selectList && deparment !== null ? false : true}
               options={selectList && renderSelect()}
+              disabled={isLoading}
             />
             <Typography.Paragraph
               className="merriweather mt-1 opacity-0"
@@ -596,6 +602,7 @@ export default function Register() {
               //   localStorage.removeItem('currentDeparment');
               navigate("/login");
             }}
+            disabled={isLoading}
           >
             <LeftOutlined className="relative right-9" />
             Back
@@ -605,6 +612,7 @@ export default function Register() {
             variant="solid"
             color="primary"
             onClick={handleSave}
+            disabled={isLoading}
           >
             {!isLoading ? "Sign Up" : <Loading3QuartersOutlined spin />}
           </Button>

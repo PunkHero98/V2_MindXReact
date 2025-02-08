@@ -31,7 +31,7 @@ const Header = () => {
   );
   const navigate = useNavigate();
   const [userImgUrl, setUserImgUrl] = useState(null);
-  const items = [
+  const itemsForMem = [
     {
       label: <Link to={`/account/${user.user_id}`}>Account</Link>,
       key: "0",
@@ -45,6 +45,23 @@ const Header = () => {
     },
   ];
 
+  const itemsForAdd = [
+    {
+      label: <Link to={`/account/${user.user_id}`}>Account</Link>,
+      key: "0",
+    },
+    {
+      label: <Link to={`/manage_user`}>Manage User</Link>,
+      key: "1",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: <Link onClick={() => handleLogout()}>Logout</Link>,
+      key: "3",
+    },
+  ];
   const language = [
     {
       label: "English",
@@ -100,7 +117,9 @@ const Header = () => {
             Welcome , {user ? user.username : "Guest"} !
           </h4>
           <Dropdown
-            menu={{ items }}
+            menu={{
+              items: user.role === "Admin" ? itemsForAdd : itemsForMem,
+            }}
             trigger={["click"]}
             overlayClassName="w-[200px] "
           >
@@ -166,7 +185,7 @@ const Header = () => {
         <Button
           disabled={addFormToggleState.state}
           onClick={() => {
-            navigate("/manageuser");
+            navigate("/chatapp");
           }}
           variant="solid"
           color="primary"

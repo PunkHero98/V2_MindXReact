@@ -90,6 +90,7 @@ export default function Login() {
             username: user.username,
             department: user.department,
             img_url: user.img_url || null,
+            role: user.role,
           };
           saveToReduxAndRedirect(userss);
           // if(tartgetChecked){
@@ -141,7 +142,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-sky-100 ">
-      <div className="main py-6 bg-white h-3/4 w-1/3  rounded-xl shadow-xl shadow-slate-400  flex flex-col items-center justify-between">
+      <div className="main py-6 bg-white h-4/5 w-1/3  rounded-xl shadow-xl shadow-slate-400  flex flex-col items-center justify-between">
         <div className="head mb-4 flex flex-col text-center gap-6 ">
           <h1 className="text-4xl mt-10 pacifico text-[#1677ff]">
             Work Management System
@@ -166,6 +167,7 @@ export default function Login() {
               value={usernameValue}
               onChange={(e) => setUsernameValue(e.target.value)}
               className={className}
+              disabled={isLoading}
             />
             <div
               className={`${
@@ -188,6 +190,7 @@ export default function Login() {
               value={emailValue}
               onChange={(e) => setEmailValue(e.target.value)}
               className={className}
+              disabled={isLoading}
             />
             <div
               className={`${
@@ -214,6 +217,7 @@ export default function Login() {
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
+              disabled={isLoading}
             />
             <div
               className={`${
@@ -223,7 +227,7 @@ export default function Login() {
               <span>{passwordNotification}</span>
             </div>
           </div>
-          <div className="mt-[-1rem] px-10 w-full merriweather-bold flex justify-between items-center">
+          <div className=" px-10 w-full merriweather-bold flex justify-between items-center">
             <Checkbox onChange={onChange}>Remember me !</Checkbox>
             <span className="text-sm underline text-blue-500 cursor-pointer active:text-blue-800">
               Forgot password
@@ -238,6 +242,7 @@ export default function Login() {
             onClick={() => {
               navigate("/register");
             }}
+            disabled={isLoading}
           >
             Register
           </Button>
@@ -256,14 +261,20 @@ export default function Login() {
             <span className="text-blue-300">Or</span>
           </Divider>
         </div>
-        <div className="w-full px-40 flex justify-around ">
-          <Button className="merriweather h-12" variant="solid" color="lime">
+        <div className="w-full px-20 flex justify-around ">
+          <Button
+            className="merriweather h-12"
+            variant="solid"
+            color="lime"
+            disabled={isLoading}
+          >
             Login With <GoogleOutlined className="text-xl" />
           </Button>
           <Button
             className="merriweather h-12"
             variant="solid"
             color="geekblue"
+            disabled={isLoading}
           >
             Login With <FacebookFilled className="text-xl" />
           </Button>
