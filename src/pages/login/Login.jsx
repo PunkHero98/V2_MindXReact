@@ -82,30 +82,41 @@ export default function Login() {
 
       if (user) {
         if (user.password === passwordValue && emailValue === user.email) {
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-          const userss = {
-            user_id: user["_id"],
-            username: user.username,
-            department: user.department,
-            img_url: user.img_url || null,
-            role: user.role,
-          };
-          saveToReduxAndRedirect(userss);
-          // if(tartgetChecked){
-          //   localStorage.setItem("currentUser", JSON.stringify(userss));
-          // }
-          // const selectUser = await handleDepartment(user.department);
-          // localStorage.setItem("selectUser", JSON.stringify(selectUser));
-          setIsLoading(false);
-          notification.success({
-            message: "Login Successful",
-            description: "You have logged in successfully!",
-            placement: "topRight",
-            duration: 1.5,
-          });
-          return;
+          if (user.isActive === false) {
+            notification.error({
+              message: "Account is not active",
+              description: "Please contact admin for more information",
+              placement: "topRight",
+              duration: 1.5,
+            });
+            setIsLoading(false);
+            return;
+          } else {
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+            const userss = {
+              user_id: user["_id"],
+              username: user.username,
+              department: user.department,
+              img_url: user.img_url || null,
+              role: user.role,
+            };
+            saveToReduxAndRedirect(userss);
+            // if(tartgetChecked){
+            //   localStorage.setItem("currentUser", JSON.stringify(userss));
+            // }
+            // const selectUser = await handleDepartment(user.department);
+            // localStorage.setItem("selectUser", JSON.stringify(selectUser));
+            setIsLoading(false);
+            notification.success({
+              message: "Login Successful",
+              description: "You have logged in successfully!",
+              placement: "topRight",
+              duration: 1.5,
+            });
+            return;
+          }
         } else {
           if (user.password !== passwordValue) {
             setPasswordNotification("Incorrect password !");
