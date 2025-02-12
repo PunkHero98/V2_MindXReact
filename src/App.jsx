@@ -14,6 +14,8 @@ import Chess from "./pages/playGround/game/Chess";
 import Caro from "./pages/playGround/game/Caro";
 import DashBoard from "./pages/dashboard/DashBoard";
 import ManageUser from "./pages/manage/manageUser/ManageUser";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
+import Vertification from "./pages/vertification/Vertification";
 import "./styles/App.css";
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot_password" element={<ForgotPassword />} />
+      <Route path="/vertification" element={<Vertification />} />
       <Route
         path="/"
         element={

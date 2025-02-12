@@ -240,7 +240,10 @@ export default function Login() {
           </div>
           <div className=" px-10 w-full merriweather-bold flex justify-between items-center">
             <Checkbox onChange={onChange}>Remember me !</Checkbox>
-            <span className="text-sm underline text-blue-500 cursor-pointer active:text-blue-800">
+            <span
+              onClick={() => navigate("/forgot_password")}
+              className="text-sm underline text-blue-500 cursor-pointer active:text-blue-800"
+            >
               Forgot password
             </span>
           </div>
