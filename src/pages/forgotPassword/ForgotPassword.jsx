@@ -3,6 +3,7 @@ import { LeftOutlined, Loading3QuartersOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getUser } from "../../services/apiHandle";
+import axios from "axios";
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [emailOrUsername, setEmailOrUsername] = useState(null);
@@ -34,6 +35,32 @@ const ForgotPassword = () => {
       return;
     }
   };
+  const fetchBackend = async (
+    endpoint,
+    method = "GET",
+    data = null,
+    headers = {}
+  ) => {
+    try {
+      console.log(data);
+      const response = await axios({
+        url: `http://localhost:3000/api/${endpoint}`,
+        method,
+        data,
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error fetching backend:",
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  };
   const handleCheckEmailOrUser = async () => {
     setIsLoading(true);
     const user = await fetchGetUser();
@@ -50,6 +77,10 @@ const ForgotPassword = () => {
       setIsLoading(false);
       return;
     }
+    // const emailsss = JSON.stringify({ email: filteredUser.email });
+    await fetchBackend("email/send-code", "POST", {
+      email: filteredUser.email,
+    });
     navigate("/vertification");
   };
   return (
@@ -81,7 +112,7 @@ const ForgotPassword = () => {
             }}
             disabled={isLoading}
           >
-            <LeftOutlined className="relative right-9" />
+            <LeftOutlined className="relative right-6" />
             Back
           </Button>
           <Button

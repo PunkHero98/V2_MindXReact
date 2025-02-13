@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Input, Button } from "antd";
 import { RedoOutlined } from "@ant-design/icons";
 const Vertification = () => {
