@@ -12,10 +12,13 @@ import {
   insertNote,
   updateNote,
   deleteNote,
-  getDepartment
+  getDepartment,
 } from "../../services/apiHandle.js";
 import { useDispatch } from "react-redux";
-import { closeAddForm , openAddForm } from "../../features/toggleForm/toggleAddForm.js";
+import {
+  closeAddForm,
+  openAddForm,
+} from "../../features/toggleForm/toggleAddForm.js";
 import { useSelector } from "react-redux";
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -47,7 +50,7 @@ function AddModal() {
   const assignState = assignNoti === "---";
 
   const dispatch = useDispatch();
-  const note = useSelector(state => state.toggleAddForm.addFormStage)
+  const note = useSelector((state) => state.toggleAddForm.addFormStage);
   const user = useSelector((state) => state.user.user);
   const handleCloseAdd = () => {
     dispatch(closeAddForm());
@@ -71,43 +74,42 @@ function AddModal() {
   // } , [note.state])
 
   function getUsernamesByDepartmentName(response, departmentName) {
-      const department = response.find((group) => group.name === departmentName);
-      if (department && department.member) {
-        return department.member
-          .filter((member) => member !== null) // Loại bỏ giá trị null
-          .map((member) => member.username); // Lấy danh sách username
-      }
-      return [];
+    const department = response.find((group) => group.name === departmentName);
+    if (department && department.member) {
+      return department.member
+        .filter((member) => member !== null) // Loại bỏ giá trị null
+        .map((member) => member.username); // Lấy danh sách username
     }
+    return [];
+  }
   const handleDepartment = async (name) => {
-      try {
-        const result = await getDepartment();
-        if (result.success === false) {
-          notification.error({
-            message: "Error when get data !",
-            description: result.message,
-            placement: "topRight",
-            duration: 1.5,
-          });
-          return null;
-        }
-        return getUsernamesByDepartmentName(result.data, name);
-      } catch (err) {
+    try {
+      const result = await getDepartment();
+      if (result.success === false) {
         notification.error({
-          message: err.message,
-          description: "Please try it again later !",
+          message: "Error when get data !",
+          description: result.message,
           placement: "topRight",
           duration: 1.5,
         });
         return null;
       }
-    };
+      return getUsernamesByDepartmentName(result.data, name);
+    } catch (err) {
+      notification.error({
+        message: err.message,
+        description: "Please try it again later !",
+        placement: "topRight",
+        duration: 1.5,
+      });
+      return null;
+    }
+  };
   const renderSelectStatus = () => {
-    return(listCard.map((f) => ({
+    return listCard.map((f) => ({
       label: <span>{f}</span>,
       value: f,
-    })))
-
+    }));
   };
   useEffect(() => {
     fetchOptions(); // Gọi hàm khi component mount
@@ -115,7 +117,7 @@ function AddModal() {
 
   const fetchOptions = async () => {
     const users = await handleDepartment(user.department);
-    setAssignment(users[0])
+    setAssignment(users[0]);
     if (users) {
       setOptions(
         users.map((f) => ({
@@ -139,7 +141,7 @@ function AddModal() {
       };
       const result = await insertNote(updatedNote);
       if (result.success === true) {
-        dispatch(openAddForm({state: false , isUpdate: true}));
+        dispatch(openAddForm({ state: false, isUpdate: true }));
         notification.success({
           message: "Success",
           placement: "topRight",
@@ -176,7 +178,7 @@ function AddModal() {
     try {
       const result = await deleteNote(id);
       if (result.success === true) {
-        dispatch(openAddForm({state: false , isUpdate: true}));
+        dispatch(openAddForm({ state: false, isUpdate: true }));
         setTitle("");
         setDescription("");
         setDate("");
@@ -212,7 +214,7 @@ function AddModal() {
       const updatedNote = { title, description, assignment, date, status };
       const result = await updateNote(id, updatedNote);
       if (result.success === true) {
-        dispatch(openAddForm({state: false , isUpdate: true}));
+        dispatch(openAddForm({ state: false, isUpdate: true }));
         setTitle("");
         setDescription("");
         setDate("");
@@ -398,7 +400,7 @@ function AddModal() {
             className="merriweather"
             status={!assignState && "error"}
             value={assignment}
-            loading={assignment == '' ? true : false}
+            loading={assignment == "" ? true : false}
             onChange={handleAssingment}
             options={options}
           />
@@ -454,6 +456,5 @@ function AddModal() {
     </div>
   );
 }
-
 
 export default AddModal;
