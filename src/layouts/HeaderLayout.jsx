@@ -14,15 +14,17 @@ const HeaderLayout = () => {
   );
   return (
     <>
-      <div className={`${addFormToggleState.state && 'bg-stone-500 blur-md opacity-50 h-full'} ${calendarState && 'bg-stone-500 blur-md opacity-50 h-full'}`}>
+      <div
+        className={`${
+          addFormToggleState.state && "bg-stone-500 blur-md opacity-50 h-full"
+        } ${calendarState && "bg-stone-500 blur-md opacity-50 h-full"} `}
+      >
         <Header />
         <main>
           <Outlet />
         </main>
       </div>
-      {addFormToggleState.state && (
-        <AddModal />
-      )}
+      {addFormToggleState.state && <AddModal />}
       {calendarState && <CalendarWithEvents noteItems={items} />}
     </>
   );

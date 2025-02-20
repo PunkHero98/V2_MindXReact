@@ -206,6 +206,17 @@ const Header = () => {
           <span className="pacifico text-xl mr-2">Play Ground</span>
           <GrGamepad className="text-3xl" />
         </Button>
+        <Button
+          onClick={() => {
+            navigate("/homework");
+          }}
+          variant="solid"
+          color="primary"
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+        >
+          <span className="pacifico text-xl mr-2">Home work</span>
+          <GrGamepad className="text-3xl" />
+        </Button>
       </div>
     </div>
   );

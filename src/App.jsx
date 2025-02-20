@@ -16,6 +16,8 @@ import DashBoard from "./pages/dashboard/DashBoard";
 import ManageUser from "./pages/manage/manageUser/ManageUser";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import Vertification from "./pages/vertification/Vertification";
+
+import HomeWork from "./pages/homeWork/HomeWork";
 import "./styles/App.css";
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
           <Route path="caro" element={<Caro />} />
           <Route path="chess" element={<Chess />} />
         </Route>
+        <Route path="homework" element={<HomeWork />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
