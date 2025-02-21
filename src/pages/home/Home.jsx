@@ -2,7 +2,7 @@ import { useId, useState, useEffect } from "react";
 import CardModal from "../../components/card/CardModal";
 import { getNote } from "../../services/apiHandle";
 import { useSelector } from "react-redux";
-import { notification  } from "antd";
+import { notification } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { addNoteItems } from "../../features/data/items";
@@ -25,7 +25,13 @@ export default function Home() {
         setItems(() =>
           result.data.filter((item) => item.assignment == currentUser.username)
         );
-        dispatch(addNoteItems(result.data.filter((item) => item.assignment == currentUser.username)))
+        dispatch(
+          addNoteItems(
+            result.data.filter(
+              (item) => item.assignment == currentUser.username
+            )
+          )
+        );
         setIsLoading(true);
         return;
       }
@@ -55,29 +61,55 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if(addFormToggleState.isUpdate){
+    if (addFormToggleState.isUpdate) {
       fetchData();
     }
   }, [addFormToggleState.state]);
   return (
     <>
       {isLoading ? (
-          <div className={` main px-8 grid grid-cols-4 gap-8 h-[77vh]`}>
-            {listCard.map((item, index) => (
-              <CardModal
-                key={`${Date.now()}-${index}-${id}`}
-                title={item}
-                items={filterItemsByStatus(item)}
-              />
+        <div className={` main px-8 grid grid-cols-4 gap-8 h-[77vh]`}>
+          {listCard.map((item, index) => (
+            <CardModal
+              key={`${Date.now()}-${index}-${id}`}
+              title={item}
+              items={filterItemsByStatus(item)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full h-[70vh] flex justify-center items-center pacifico left-[800px] top-1/3 text-4xl text-[#1677ff]">
+          <SyncOutlined spin className="mr-12" />
+          <div className="flex space-x-1 text-4xl font-bold">
+            {[
+              "L",
+              "o",
+              "a",
+              "d",
+              "i",
+              "n",
+              "g",
+              " ",
+              "d",
+              "a",
+              "t",
+              "a",
+              " ",
+              ".",
+              ".",
+              ".",
+            ].map((letter, index) => (
+              <span
+                key={index}
+                className="animate-[bounce_1.5s_infinite] inline-block"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {letter}
+              </span>
             ))}
           </div>
-      ) : (
-        <div className="absolute left-[800px] top-1/3 text-4xl text-[#1677ff]">
-          <SyncOutlined spin className="mr-12" />
-          <span className="pacifico ">Loading data ...</span>
         </div>
       )}
-      
     </>
   );
 }
