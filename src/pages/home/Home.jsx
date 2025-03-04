@@ -6,6 +6,7 @@ import { notification } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { addNoteItems } from "../../features/data/items";
+import { Modal } from "antd";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function Home() {
   const currentUser = useSelector((state) => state.user.user);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -65,18 +67,28 @@ export default function Home() {
       fetchData();
     }
   }, [addFormToggleState.state]);
+
+  const handleDetails = () => {
+    setOpenDetails(true);
+  };
   return (
     <>
       {isLoading ? (
+       <>
         <div className={` main px-8 grid grid-cols-4 gap-8 h-[77vh]`}>
-          {listCard.map((item, index) => (
-            <CardModal
-              key={`${Date.now()}-${index}-${id}`}
-              title={item}
-              items={filterItemsByStatus(item)}
-            />
-          ))}
-        </div>
+            {listCard.map((item, index) => (
+              <CardModal
+                openDetails={handleDetails}
+                key={`${Date.now()}-${index}-${id}`}
+                title={item}
+                items={filterItemsByStatus(item)}
+              />
+            ))}
+          </div>
+          <Modal open={openDetails} onCancel={() => setOpenDetails(false)}>
+
+          </Modal>
+       </>
       ) : (
         <div className="w-full h-[70vh] flex justify-center items-center pacifico left-[800px] top-1/3 text-4xl text-[#1677ff]">
           <SyncOutlined spin className="mr-12" />

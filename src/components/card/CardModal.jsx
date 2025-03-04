@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { openAddForm } from "../../features/toggleForm/toggleAddForm";
 
-function CardModal({ title, items }) {
+function CardModal({ title, items , openDetails }) {
   const dispatch = useDispatch();
   const searchQuerry = useSelector((state) => state.search.searchQuerry);
   const filteredNotes = items.filter(
@@ -52,6 +52,7 @@ function CardModal({ title, items }) {
         {filteredNotes.length > 0 &&
           filteredNotes.map((note) => (
             <Note
+              openDetails={openDetails}
               key={`${note.date}-${note.title}`}
               items={note}
             />
@@ -65,6 +66,7 @@ CardModal.propTypes = {
   items: PropTypes.array.isRequired,
   //     toggle: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
+  openDetails: PropTypes.func.isRequired,
   //     onEdit: PropTypes.func.isRequired,
   //     searchQuerry: PropTypes.string.isRequired,
   //     openAddNew: PropTypes.func.isRequired,

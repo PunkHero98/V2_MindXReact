@@ -13,6 +13,7 @@ import {
   addUser,
   updateDepartment,
 } from "../../services/apiHandle";
+import { checkUserEmail , addNewUser } from "../../services/ownApiHandle";
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -180,6 +181,56 @@ export default function Register() {
       });
     }
   };
+  // const handleBlurOnEmail = async () => {
+  //   try {
+  //     if (email === "") {
+  //       setEmailNoti("Cannot leave this field blank !");
+  //       updateSaveState("email", "notBlank", false);
+  //       return;
+  //     }
+  //     if (!emailRegex.test(email)) {
+  //       setEmailNoti("Invalid Email Format !");
+  //       updateSaveState("email", "isValid", false);
+  //       return;
+  //     }
+  //     setIsLoadingEmail(true);
+  //     const result = await getUser();
+  //     if (result.success === false) {
+  //       notification.error({
+  //         message: "Error when fetching !",
+  //         description: result.message,
+  //         placement: "topRight",
+  //         duration: 1.5,
+  //       });
+  //       setIsLoadingEmail(false);
+  //       return;
+  //     }
+  //     const newResult = result.data.find((item) => email === item.email);
+  //     if (newResult) {
+  //       setEmailNoti("Email already exist ! Please try another one");
+  //       updateSaveState("email", "unique", false);
+  //       setIsLoadingEmail(false);
+  //       setStateForEmailIcon(false);
+  //     } else {
+  //       updateSaveState("email", "notBlank", true);
+  //       updateSaveState("email", "isValid", true);
+  //       updateSaveState("email", "unique", true);
+  //       setEmailNoti("---");
+  //       setIsLoadingEmail(false);
+  //       setStateForEmailIcon(true);
+  //     }
+  //   } catch (err) {
+  //     setIsLoadingEmail(false);
+  //     setStateForEmailIcon(false);
+  //     notification.error({
+  //       message: err.message,
+  //       description: "Please try it again later !",
+  //       placement: "topRight",
+  //       duration: 1.5,
+  //     });
+  //   }
+  // };
+
   const handleBlurOnEmail = async () => {
     try {
       if (email === "") {
@@ -193,8 +244,8 @@ export default function Register() {
         return;
       }
       setIsLoadingEmail(true);
-      const result = await getUser();
-      if (result.success === false) {
+      const result = await checkUserEmail(email);
+      if (result.fail) {
         notification.error({
           message: "Error when fetching !",
           description: result.message,
@@ -204,8 +255,9 @@ export default function Register() {
         setIsLoadingEmail(false);
         return;
       }
-      const newResult = result.data.find((item) => email === item.email);
-      if (newResult) {
+      // const newResult = result.data.find((item) => email === item.email);
+      console.log(result.success);
+      if (!result.success) {
         setEmailNoti("Email already exist ! Please try another one");
         updateSaveState("email", "unique", false);
         setIsLoadingEmail(false);
@@ -229,6 +281,7 @@ export default function Register() {
       });
     }
   };
+
   const onTypingPassWord = () => {
     if (password === "") {
       setPasNoti("Cannot leave PassWord field blank !");
@@ -340,6 +393,7 @@ export default function Register() {
       });
     }
   };
+
   const handleSave = () => {
     const fieldsWithFalseOrNullStatus = [];
     setIsLoading(true);
