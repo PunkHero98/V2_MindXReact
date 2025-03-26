@@ -1,0 +1,7 @@
+.dark .ant-progress-text {
+    color: #E0E0E0 !important; /* Màu chữ của số % */
+  }
+  
+.accountMain {
+  min-height: 74vh;
+}

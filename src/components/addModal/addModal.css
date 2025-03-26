@@ -1,0 +1,79 @@
+.dark  .ant-input::placeholder {
+    color: #cbd5e1; /* Màu slate-300 */
+  }
+
+.ant-input::placeholder {
+    color: black; /* Màu slate-300 */
+  }
+  .dark .ant-input-show-count-suffix {
+    color: #E0E0E0 !important;
+  }
+/* Mặc định */
+.ant-picker {
+    background-color: white;
+    color: black;
+    border: 1px solid #d1d5db;
+  }
+  
+  /* Dark Mode */
+  .dark .ant-picker {
+    background-color: #475569;
+    color: #E0E0E0;
+    border-color: #66A3FF;
+  }
+  
+  /* Màu chữ placeholder */
+  .dark .ant-picker input::placeholder {
+    color: #E0E0E0;
+  }
+  .dark .ant-picker .ant-picker-suffix {
+    color: #E0E0E0 !important;
+  }
+
+  /* body.dark .ant-picker-dropdown .ant-picker-panel {
+    background-color: #475569 !important;
+  }
+  .dark .ant-picker-dropdown .ant-picker-cell {
+    color: #E0E0E0 !important;
+  }
+  
+  .dark .ant-picker-dropdown .ant-picker-cell-selected {
+    border: 1px solid #66A3FF !important;
+    background-color: #66A3FF1A !important;
+  }
+  
+  .dark .ant-picker-dropdown .ant-picker-cell:hover {
+    background-color: #94A3B8 !important;
+    color: #E0E0E0 !important;
+  } */
+  
+  /* Mặc định */
+.ant-select-selector {
+    background-color: white !important;
+    color: black !important;
+  }
+  
+  /* Dark Mode */
+  .dark .ant-select-selector {
+    background-color: #475569 !important;
+    color: #E0E0E0 !important;
+    border-color: #66A3FF !important;
+  }
+  
+  /* Màu placeholder */
+  .dark .ant-select-selection-placeholder {
+    color: #66A3FF !important;
+  }
+  
+  /* Màu dropdown */
+  .dark .ant-select-dropdown {
+    background-color: #475569 !important;
+    color: #E0E0E0 !important;
+  }
+  
+  /* Màu hover trong dropdown */
+  .dark .ant-select-item-option:hover {
+    background-color: #66A3FF !important;
+    color: #E0E0E0 !important;
+  }
+  

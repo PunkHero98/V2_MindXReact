@@ -1,0 +1,10 @@
+.scroll-container-cardModal {
+  max-height: 76vh;
+    overflow-y: auto; /* Cho phép cuộn */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  }
+  
+  .scroll-container-cardModal::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn trên Chrome, Edge, Safari */
+  }

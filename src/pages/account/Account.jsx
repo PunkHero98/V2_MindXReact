@@ -19,6 +19,7 @@ import { login } from "../../features/auth/Login";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Image } from "antd";
+import './account.css'
 
 const { Paragraph } = Typography;
 const Account = () => {
@@ -167,7 +168,7 @@ const Account = () => {
           <label className="merriweather text-base">
             {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
           </label>
-          <Paragraph copyable className="mt-2 roboto-slab-base">
+          <Paragraph copyable className="mt-2 roboto-slab-base dark:text-[#E0E0E0]">
             {userData[key]}
           </Paragraph>
         </div>
@@ -247,7 +248,7 @@ const Account = () => {
 
   return (
     <>
-      <div className="flex w-full h-min-[500px] justify-between px-8">
+      <div className="accountMain flex w-full justify-between px-8 dark:bg-slate-800">
         <div className="img_area w-1/4 flex flex-col items-center justify-between py-8">
           <div className="w-44 h-44 mb-4 border border-gray-300 rounded-lg flex justify-center items-center bg-gray-100">
             {!loadingSkeleton ? (
@@ -299,12 +300,12 @@ const Account = () => {
               return isAllowedType && isLt2M;
             }}
           >
-            <div className="px-8 py-2 hover:bg-blue-600 hover:text-white">
+            <div className="px-8 py-2 hover:bg-blue-600 hover:text-white dark:bg-slate-600 dark:text-[#66A3FF] dark:outline-[#60A5FA]">
               Upload
             </div>
           </Upload>
           <Progress
-            className={`${uploading ? "" : "opacity-0"} px-10`}
+            className={`${uploading ? "" : "opacity-0"} px-10 dark:text-[#E0E0E0]`}
             type="line"
             percent={uploadProgress.percent}
             status="active"
@@ -312,9 +313,9 @@ const Account = () => {
             style={{ width: "100%" }}
             showInfo={true}
           />
-          <div className="w-[90%] h-[48%]  rounded-md outline outline-[#1677ff] flex flex-col gap-2">
-            <div className="w-full h-10 bg-[#1677ff] flex justify-center items-center">
-              <label className="pacifico text-white text-xl">
+          <div className="w-[90%] h-[48%]  rounded-md outline outline-[#1677ff] dark:outline-[#60A5FA] flex flex-col gap-2">
+            <div className="w-full h-10 bg-[#1677ff] flex justify-center items-center dark:bg-[#66A3FF]">
+              <label className="pacifico text-white text-xl dark:text-slate-800">
                 History Avatar
               </label>
             </div>
@@ -343,12 +344,12 @@ const Account = () => {
         {/* Khu vực chính */}
         <div className="main w-3/4 grid grid-cols-1 grid-rows-2 gap-6">
           <div className="flex flex-col outline outline-blue-400 rounded-md">
-            <div className="w-full h-10 bg-[#1677ff] flex justify-center items-center">
-              <label className="pacifico text-white text-xl">Details</label>
+            <div className="w-full h-10 bg-[#1677ff] flex justify-center items-center dark:bg-[#66A3FF]">
+              <label className="pacifico text-white text-xl dark:text-slate-800">Details</label>
             </div>
             {!loadingSkeleton ? (
               <div className="grid grid-cols-2 gap-6 px-4 py-4">
-                <div className=" grid grid-cols-2 gap-6">{renderFields()}</div>
+                <div className=" grid grid-cols-2 gap-6 dark:text-[#E0E0E0]">{renderFields()}</div>
                 <ChangePassWord userData={userData} />
               </div>
             ) : (

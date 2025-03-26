@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { openAddForm } from "../../features/toggleForm/toggleAddForm";
-
+import './cardModal.css'
 function CardModal({ title, items , openDetails }) {
   const dispatch = useDispatch();
   const searchQuerry = useSelector((state) => state.search.searchQuerry);
@@ -21,13 +21,13 @@ function CardModal({ title, items , openDetails }) {
   }
   return (
     <Card
-      className={`px-4 py-2 bg-[#E6ECF0] overflow-y-auto h-fit max-h-[75vh] min-h-[100px]`}
+      className={`px-4  bg-[#E6ECF0] overflow-y-auto h-fit min-h-[100px] dark:bg-slate-800 dark:border-[#66A3FF] scroll-container-cardModal`}
     >
-      <div className="top_show flex justify-between items-center ">
+      <div className="top_show flex justify-between items-center sticky top-0 z-10 bg-[#E6ECF0] dark:bg-slate-800 py-3">
         <div className="left flex items-center">
-          <h2 className="text-2xl font-bold mr-8 pacifico">{title}</h2>
+          <h2 className="text-2xl font-bold mr-8 pacifico dark:text-[#E0E0E0]">{title}</h2>
           <span
-            className={`numberOfNote cursor-default roboto-slab-base flex justify-center items-center w-8 h-8 rounded-full  text-lg ${
+            className={`numberOfNote cursor-default roboto-slab-base flex justify-center items-center w-8 h-8 rounded-full dark:bg-[#66A3FF] dark:text-slate-800 text-lg ${
               filteredNotes.length > 0
                 ? "bg-background text-white"
                 : "bg-[#D5D5D5]"

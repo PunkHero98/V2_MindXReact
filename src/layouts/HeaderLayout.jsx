@@ -20,7 +20,7 @@ const HeaderLayout = () => {
         } ${calendarState && "bg-stone-500 blur-md opacity-50 h-full"} `}
       >
         <Header />
-        <main>
+        <main className="dark:bg-slate-800">
           <Outlet />
         </main>
       </div>

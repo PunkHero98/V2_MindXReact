@@ -1,0 +1,18 @@
+.custom-search .ant-btn-primary {
+    background-color: #1677FF !important;
+    border-color: #1677FF !important;
+  }
+  
+  /* Khi Dark Mode bật */
+  .dark .custom-search .ant-btn-primary {
+    background-color: #66A3FF !important;
+    border-color: #66A3FF !important;
+  }
+  .custom-search .ant-input-search-button svg {
+    color: white !important;
+  }
+  
+  /* Khi Dark Mode bật (icon #66A3FF) */
+  .dark .custom-search .ant-input-search-button svg {
+    color: #1E293B !important;
+  }

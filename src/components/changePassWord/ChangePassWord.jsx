@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Input, Button, message, notification } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import { updateUser } from "../../services/apiHandle";
+import './changePassword.css'
 import propTypes from "prop-types";
 const ChangePassWord = ({ userData }) => {
   const { id } = useParams();
@@ -277,7 +278,7 @@ const ChangePassWord = ({ userData }) => {
       <form
         className={`flex flex-col ${
           changePassShow ? "justify-between" : "justify-center"
-        } items-center`}
+        } items-center `}
         onKeyUp={handleEnter}
       >
         <div
@@ -337,7 +338,7 @@ const ChangePassWord = ({ userData }) => {
             }}
             className={`${
               changePassShow ? "" : "hidden"
-            } pacifico px-4 py-6 mb-2 text-xl`}
+            } pacifico px-4 py-6 mb-2 text-xl dark:bg-slate-800 dark:text-[#DC2626] dark:border-[#DC2626]`}
             disabled={isLoading}
           >
             Cancel
@@ -345,7 +346,7 @@ const ChangePassWord = ({ userData }) => {
           <Button
             variant="solid"
             color="blue"
-            className="pacifico px-4 py-6 mb-2 text-xl transition-all duration-50 ease-out "
+            className="pacifico px-4 py-6 mb-2 text-xl transition-all duration-50 ease-out dark:bg-[#66A3FF] dark:text-slate-800"
             onClick={handleChangePassword}
             disabled={isLoading}
           >

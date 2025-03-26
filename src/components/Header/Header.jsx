@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { setSearchQuerry } from "../../features/search/searchQuerry";
 import { Button, Input, Space, Dropdown, Switch, Avatar } from "antd";
 import { GrGamepad } from "react-icons/gr";
+import './header.css'
 import {
   UserOutlined,
   CalendarTwoTone,
@@ -31,6 +32,20 @@ const Header = () => {
   );
   const navigate = useNavigate();
   const [userImgUrl, setUserImgUrl] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   const itemsForMem = [
     {
       label: <Link to={`/account/${user.user_id}`}>Account</Link>,
@@ -91,29 +106,29 @@ const Header = () => {
     setUserImgUrl(user.img_url);
   }, [user.img_url]);
   return (
-    <div className="flex flex-col px-8">
+    <div className="flex flex-col px-8 dark:bg-slate-800">
       <div
         className={` upperContainer flex justify-between items-center  py-8`}
       >
-        <h1 className="pacifico text-3xl text-[#1677ff] cursor-default">
+        <h1 className="pacifico text-3xl text-[#1677ff] cursor-default dark:text-[#66A3FF]">
           Work Management System
         </h1>
         <HomeFilled
-          className="text-3xl text-[#1677ff] cursor-pointer"
+          className="text-3xl text-[#1677ff] cursor-pointer dark:text-[#66A3FF]"
           onClick={() => {
             navigate("/");
           }}
         />
         <Search
           placeholder="Search title or description"
-          className="roboto-slab-base text-lg w-[500px]"
+          className="roboto-slab-base text-lg w-[500px] dark:text-white custom-search"
           enterButton
           size="large"
           //   onSearch={handleSearch}
           onChange={handleSearch}
         />
         <div className="flex items-center gap-4">
-          <h4 className="mr-4 text-2xl pacifico">
+          <h4 className="mr-4 text-2xl pacifico dark:text-[#E0E0E0]">
             Welcome , {user ? user.username : "Guest"} !
           </h4>
           <Dropdown
@@ -144,13 +159,14 @@ const Header = () => {
           trigger={["click"]}
           overlayClassName="w-[100px]"
         >
-          <GlobalOutlined className="cursor-pointer text-3xl text-blue-500" />
+          <GlobalOutlined className="cursor-pointer text-3xl text-blue-500 dark:text-[#66A3FF]" />
         </Dropdown>
         <Switch
           className="px-2"
-          checkedChildren={<SunOutlined />}
-          unCheckedChildren={<MoonOutlined />}
-          defaultChecked
+          unCheckedChildren={<SunOutlined />}
+          checkedChildren={<MoonOutlined />}
+          checked={darkMode}
+          onChange={() => setDarkMode(!darkMode)}
         />
       </div>
       <div className="navbar mb-8 rounded-full flex items-center  h-12">
@@ -159,14 +175,14 @@ const Header = () => {
           onClick={handleOpenAddForm}
           variant={"solid"}
           color="primary"
-          className={` addNew pacifico rounded-l-3xl rounded-r-xl h-12 text-xl  `}
+          className={` addNew pacifico rounded-l-3xl rounded-r-xl h-12 text-xl dark:bg-[#66A3FF] dark:text-slate-800`}
         >
           Add New
         </Button>
         <Button
           variant="solid"
           color="primary"
-          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl dark:bg-[#66A3FF] dark:text-slate-800`}
           onClick={() => navigate("dashboard")}
         >
           <span className="pacifico text-xl mr-1">Dash Board</span>
@@ -175,7 +191,7 @@ const Header = () => {
         <Button
           variant="solid"
           color="primary"
-          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl dark:bg-[#66A3FF] dark:text-slate-800`}
           onClick={handleOpenCalendar}
           disabled={addFormToggleState.state}
         >
@@ -189,7 +205,7 @@ const Header = () => {
           }}
           variant="solid"
           color="primary"
-          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl dark:bg-[#66A3FF] dark:text-slate-800 `}
         >
           <span className="pacifico text-xl mr-1">Chat App</span>
           <WechatOutlined className="text-3xl" />
@@ -201,7 +217,7 @@ const Header = () => {
           }}
           variant="solid"
           color="primary"
-          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl dark:bg-[#66A3FF] dark:text-slate-800`}
         >
           <span className="pacifico text-xl mr-2">Play Ground</span>
           <GrGamepad className="text-3xl" />
@@ -212,7 +228,7 @@ const Header = () => {
           }}
           variant="solid"
           color="primary"
-          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl`}
+          className={` h-12 rounded-r-xl rounded-l-xl ml-20 text-2xl dark:bg-[#66A3FF] dark:text-slate-800`}
         >
           <span className="pacifico text-xl mr-2">Home work</span>
           <GrGamepad className="text-3xl" />

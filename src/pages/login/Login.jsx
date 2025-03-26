@@ -11,6 +11,7 @@ import {
   FacebookFilled,
   GoogleOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ export default function Login() {
     navigate("/");
   };
 
+  useEffect(()=>{
+    document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+  },[])
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
     // setTargetChecked(e.target.checked);

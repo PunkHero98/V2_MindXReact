@@ -7,6 +7,7 @@ import { SyncOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { addNoteItems } from "../../features/data/items";
 import { Modal } from "antd";
+import NoteDetails from "../../components/noteDetails/NoteDetails";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ export default function Home() {
     <>
       {isLoading ? (
        <>
-        <div className={` main px-8 grid grid-cols-4 gap-8 h-[77vh]`}>
+        <div className={` main px-8 grid grid-cols-4 gap-8 h-[77vh] dark:bg-slate-800`}>
             {listCard.map((item, index) => (
               <CardModal
                 openDetails={handleDetails}
@@ -85,12 +86,12 @@ export default function Home() {
               />
             ))}
           </div>
-          <Modal open={openDetails} onCancel={() => setOpenDetails(false)}>
-
+          <Modal open={openDetails} onCancel={() => setOpenDetails(false)} footer={null} width={'1000px'}>
+            <NoteDetails />
           </Modal>
        </>
       ) : (
-        <div className="w-full h-[70vh] flex justify-center items-center pacifico left-[800px] top-1/3 text-4xl text-[#1677ff]">
+        <div className="w-full h-[77vh] flex justify-center items-center pacifico left-[800px] top-1/3 text-4xl text-[#1677ff] dark:bg-slate-800 dark:text-[#66A3FF]">
           <SyncOutlined spin className="mr-12" />
           <div className="flex space-x-1 text-4xl font-bold">
             {[

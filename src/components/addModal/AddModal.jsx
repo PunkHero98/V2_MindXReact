@@ -13,6 +13,7 @@ import {
   updateNote,
   deleteNote,
   getDepartment,
+  getNote,
 } from "../../services/apiHandle.js";
 import { useDispatch } from "react-redux";
 import {
@@ -20,6 +21,7 @@ import {
   openAddForm,
 } from "../../features/toggleForm/toggleAddForm.js";
 import { useSelector } from "react-redux";
+import './addModal.css'
 const { TextArea } = Input;
 const { confirm } = Modal;
 
@@ -137,6 +139,7 @@ function AddModal() {
         assignment,
         date,
         status,
+        timeLine: await getTimeLine(true),
         asign_by: username,
       };
       const result = await insertNote(updatedNote);
@@ -212,8 +215,13 @@ function AddModal() {
   const handleEdit = async () => {
     try {
       const updatedNote = { title, description, assignment, date, status };
+      const response = await getNote();
+      const prevNote = response.data.filter((item) => item._id === id); // Lấy thông tin cũ của note
+  
+      await getTimeLine(false, id, prevNote, updatedNote); // Cập nhật TimeLine
+  
       const result = await updateNote(id, updatedNote);
-      if (result.success === true) {
+      if (result.success) {
         dispatch(openAddForm({ state: false, isUpdate: true }));
         setTitle("");
         setDescription("");
@@ -225,10 +233,9 @@ function AddModal() {
           placement: "topRight",
           duration: 1.5,
         });
-        setIsLoading(false);
         return;
       }
-
+  
       notification.error({
         message: result.message,
         placement: "topRight",
@@ -237,12 +244,67 @@ function AddModal() {
     } catch (err) {
       notification.error({
         message: err.message,
-        description: "Please try it again later !",
+        description: "Please try again later!",
         placement: "topRight",
         duration: 1.5,
       });
     }
   };
+
+  const getTimeLine = async (add, edit = false, prevNote = {}, updatedNote = {}) => {
+    try {
+      const {username } = user;
+      let timeLine = [];
+      if (add) {
+        timeLine.push({ children: `Created by ${username} at ${formatDate(Date.now())}` });
+        return timeLine;
+      }
+  
+      if (edit) {
+        const result = await getNote();
+        let currentNote = result.data.find((item) => item._id === edit);
+        let currentTimeLine = currentNote.timeLine || [];
+  
+        // Mảng lưu lại các thay đổi
+        let changes = [];
+  
+        // Kiểm tra sự thay đổi của từng thuộc tính
+        Object.keys(updatedNote).forEach((key) => {
+          if (prevNote[key] !== updatedNote[key]) {
+            changes.push(`${key} changed from "${prevNote[key]}" to "${updatedNote[key]}"`);
+          }
+        });
+  
+        // Nếu có thay đổi, thêm vào timeline với thời gian
+        if (changes.length > 0) {
+          currentTimeLine.push({
+            children: `${changes.join(", ")} at ${formatDate(Date.now())}`
+          });
+        }
+  
+        // Cập nhật timeLine vào note
+        await updateNote(edit, { ...currentNote, timeLine: currentTimeLine });
+      }
+    } catch (err) {
+      console.error("Error updating timeline:", err);
+    }
+  };
+  
+
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+  
+    const day = String(date.getDate()).padStart(2, "0");
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+  
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+  
+    return `${day}-${month}-${year} : ${hours}:${minutes}`;
+  }
+
   const handleDate = (date) => {
     if (date) {
       const customFormat = date.format("MMM Do YYYY");
@@ -302,15 +364,15 @@ function AddModal() {
     });
   };
   return (
-    <div className="w-[700px] h-[600px] bg-white rounded-lg px-4 py-2 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[50] border-2 shadow-lg">
+    <div className="w-[700px] h-[600px] bg-white rounded-lg px-4 py-2 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[50] border-2 shadow-lg dark:bg-slate-800 dark:border-[#66A3FF] dark:text-[#E0E0E0]">
       <div className="first_row flex justify-between items-center mt-5">
-        <div className=" w-fit p-1 rounded-xl border-2">
+        <div className=" w-fit p-1 rounded-xl border-2 dark:border-[#66A3FF]">
           <FlagFilled className="text-3xl text-green-400" />
         </div>
 
         <CloseSquareOutlined
           onClick={handleCloseAdd}
-          className="text-4xl text-[#f5222d] hover:bg-[#f5222d] hover:text-white"
+          className="text-4xl text-[#f5222d] hover:bg-[#f5222d] hover:text-white dark:text-[#DC2626] dark:hover:bg-slate-600"
         />
       </div>
       <h2 className="table_name pacifico text-left text-4xl mt-6 mb-9">
@@ -323,7 +385,7 @@ function AddModal() {
           </label>
 
           <Input
-            className="merriweather-bold text-lg"
+            className="merriweather-bold text-lg dark:bg-slate-600 dark:text-[#E0E0E0] dark:border-[#66A3FF]"
             placeholder="Enter title"
             showCount
             value={title}
@@ -346,7 +408,7 @@ function AddModal() {
           </label>
 
           <DatePicker
-            className="merriweather"
+            className="merriweather dark:bg-slate-600 dark:text-[#E0E0E0] dark:border-[#66A3FF]"
             value={date ? moment(date, "MMM Do YYYY") : null}
             style={{ height: 50 }}
             status={!dateState && "error"}
@@ -371,7 +433,7 @@ function AddModal() {
 
           <TextArea
             placeholder="Enter description"
-            className="merriweather"
+            className="merriweather dark:bg-slate-600 dark:text-[#E0E0E0] dark:border-[#66A3FF]"
             status={!descriptState && "error"}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -439,7 +501,7 @@ function AddModal() {
           variant="outlined"
           loading={loadingForDelete}
           disabled={loadingForDelete}
-          className="cancel pacifico w-[46%] h-12 text-2xl"
+          className="cancel pacifico w-[46%] h-12 text-2xl dark:bg-slate-800 dark:text-[#DC2626] dark:border-[#DC2626]"
         >
           {id ? "Delete" : "Cancel"}
         </Button>
@@ -447,7 +509,7 @@ function AddModal() {
           color="primary"
           onClick={checkTitle}
           variant="solid"
-          className="save pacifico w-[46%] h-12 text-2xl "
+          className="save pacifico w-[46%] h-12 text-2xl dark:bg-[#66A3FF] dark:text-slate-800"
           disabled={isLoading}
         >
           {!isLoading ? "Save" : <Loading3QuartersOutlined spin />}

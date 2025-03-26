@@ -34,7 +34,7 @@ function Note({ items , openDetails }) {
   };
 
   return (
-    <div className="mt-8 bg-white px-4 rounded-lg cursor-pointer" onClick={openDetails}>
+    <div className="mt-8 bg-white px-4 rounded-lg  dark:bg-slate-600  dark:text-[#E0E0E0]" >
       <div className="top flex justify-between py-4">
         <h1 className="text-base merriweather-bolder">{items.title}</h1>
         <LuPencilLine className="text-2xl" onClick={handleClick}/>
@@ -42,9 +42,14 @@ function Note({ items , openDetails }) {
       <div className="text_container mb-5 merriweather">
         <p>{items.description}</p>
       </div>
-      <span className="bg-[#1677ff] text-white p-2 rounded-md merriweather-bold text-">
-        {items.assignment}
-      </span>
+      <div className="flex justify-between">
+        <span className="bg-[#1677ff] text-white p-2 rounded-md merriweather-bold dark:bg-[#66A3FF] dark:text-slate-800">
+          {items.assignment}
+        </span>
+        <span className="dark:bg-teal-400 bg-green-500 text-white p-2 rounded-md cursor-pointer dark:text-slate-800" onClick={openDetails} >
+          Details
+        </span>
+      </div>
       <hr className="mt-5 mb-3" />
       <div className="bottom flex justify-center items-center gap-8 pb-4">
         <div className="clip flex justify-center items-center">

@@ -1,0 +1,20 @@
+.ant-table {
+    background-color: white;
+    color: black;
+  }
+  
+  .dark .ant-table {
+    background-color: #30415c !important; /* bg-slate-800 */
+    color: #1e293b !important;
+  }
+  .custom-table .ant-table-thead > tr > th {
+    background-color: white !important; /* Màu header khi sáng */
+    color: black !important; /* Màu chữ slate-800 */
+  }
+  
+  .dark .custom-table .ant-table-thead > tr > th {
+    background-color: #66A3FF !important; /* Màu header khi Dark Mode */
+    color: #1e293b !important; /* Màu chữ khi Dark Mode */
+    font-weight: bold;
+  }
+  

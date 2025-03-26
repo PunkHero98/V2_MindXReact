@@ -6,6 +6,7 @@ import { Typography, Modal, notification, Select, Popconfirm } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { CloseCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import './manageUser.css'
 import dayjs from "dayjs";
 const { Paragraph } = Typography;
 const ManageUser = () => {
@@ -474,7 +475,7 @@ const ManageUser = () => {
 
   return (
     <>
-      <div className="px-8">
+      <div className="px-8 dark:bg-slate-800">
         {/* 🔹 Ô tìm kiếm username */}
         <div className="flex justify-between items-center">
           <Input
@@ -489,7 +490,7 @@ const ManageUser = () => {
 
         {/* 🔹 Hiển thị bảng dữ liệu */}
         <Table
-          className="  roboto-slab-base"
+          className="  roboto-slab-base custom-table"
           columns={columns}
           dataSource={
             tableLoading
