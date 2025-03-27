@@ -13,7 +13,6 @@ import {
   addUser,
   updateDepartment,
 } from "../../services/apiHandle";
-import { checkUserEmail , addNewUser , checkUserName } from "../../services/ownApiHandle";
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -138,50 +137,6 @@ export default function Register() {
     setEmailNoti("---");
     setStateForEmailIcon(false);
   };
-  // const handleBlurOnuserName = async () => {
-  //   try {
-  //     if (username === "") {
-  //       setUsernameNoti("Cannot leave this field blank!");
-  //       updateSaveState("username", "notBlank", false);
-  //       return;
-  //     }
-  //     setIsLoadingUser(true);
-  //     const result = await getUser();
-  //     if (result.success === false) {
-  //       notification.error({
-  //         message: "Error when fetching !",
-  //         description: result.message,
-  //         placement: "topRight",
-  //         duration: 1.5,
-  //       });
-  //       setIsLoadingUser(false);
-  //       return;
-  //     }
-  //     const newResult = result.data.find((item) => username === item.username);
-  //     if (newResult) {
-  //       setUsernameNoti("Username already exist ! Please try another one");
-  //       updateSaveState("username", "unique", false);
-  //       setIsLoadingUser(false);
-  //       setStateForUserIcon(false);
-  //     } else {
-  //       updateSaveState("username", "unique", true);
-  //       updateSaveState("username", "notBlank", true);
-  //       setUsernameNoti("---");
-  //       setIsLoadingUser(false);
-  //       setStateForUserIcon(true);
-  //     }
-  //   } catch (err) {
-  //     setIsLoadingUser(false);
-  //     setStateForUserIcon(false);
-  //     notification.error({
-  //       message: err.message,
-  //       description: "Please try it again later !",
-  //       placement: "topRight",
-  //       duration: 1.5,
-  //     });
-  //   }
-  // };
-
   const handleBlurOnuserName = async () => {
     try {
       if (username === "") {
@@ -190,8 +145,8 @@ export default function Register() {
         return;
       }
       setIsLoadingUser(true);
-      const result = await checkUserName(username);
-      if (result.fail) {
+      const result = await getUser();
+      if (result.success === false) {
         notification.error({
           message: "Error when fetching !",
           description: result.message,
@@ -201,8 +156,8 @@ export default function Register() {
         setIsLoadingUser(false);
         return;
       }
-      // const newResult = result.data.find((item) => username === item.username);
-      if (!result.success) {
+      const newResult = result.data.find((item) => username === item.username);
+      if (newResult) {
         setUsernameNoti("Username already exist ! Please try another one");
         updateSaveState("username", "unique", false);
         setIsLoadingUser(false);
@@ -226,47 +181,41 @@ export default function Register() {
     }
   };
 
-  // const handleBlurOnEmail = async () => {
+  // const handleBlurOnuserName = async () => {
   //   try {
-  //     if (email === "") {
-  //       setEmailNoti("Cannot leave this field blank !");
-  //       updateSaveState("email", "notBlank", false);
+  //     if (username === "") {
+  //       setUsernameNoti("Cannot leave this field blank!");
+  //       updateSaveState("username", "notBlank", false);
   //       return;
   //     }
-  //     if (!emailRegex.test(email)) {
-  //       setEmailNoti("Invalid Email Format !");
-  //       updateSaveState("email", "isValid", false);
-  //       return;
-  //     }
-  //     setIsLoadingEmail(true);
-  //     const result = await getUser();
-  //     if (result.success === false) {
+  //     setIsLoadingUser(true);
+  //     const result = await checkUserName(username);
+  //     if (result.fail) {
   //       notification.error({
   //         message: "Error when fetching !",
   //         description: result.message,
   //         placement: "topRight",
   //         duration: 1.5,
   //       });
-  //       setIsLoadingEmail(false);
+  //       setIsLoadingUser(false);
   //       return;
   //     }
-  //     const newResult = result.data.find((item) => email === item.email);
-  //     if (newResult) {
-  //       setEmailNoti("Email already exist ! Please try another one");
-  //       updateSaveState("email", "unique", false);
-  //       setIsLoadingEmail(false);
-  //       setStateForEmailIcon(false);
+  //     // const newResult = result.data.find((item) => username === item.username);
+  //     if (!result.success) {
+  //       setUsernameNoti("Username already exist ! Please try another one");
+  //       updateSaveState("username", "unique", false);
+  //       setIsLoadingUser(false);
+  //       setStateForUserIcon(false);
   //     } else {
-  //       updateSaveState("email", "notBlank", true);
-  //       updateSaveState("email", "isValid", true);
-  //       updateSaveState("email", "unique", true);
-  //       setEmailNoti("---");
-  //       setIsLoadingEmail(false);
-  //       setStateForEmailIcon(true);
+  //       updateSaveState("username", "unique", true);
+  //       updateSaveState("username", "notBlank", true);
+  //       setUsernameNoti("---");
+  //       setIsLoadingUser(false);
+  //       setStateForUserIcon(true);
   //     }
   //   } catch (err) {
-  //     setIsLoadingEmail(false);
-  //     setStateForEmailIcon(false);
+  //     setIsLoadingUser(false);
+  //     setStateForUserIcon(false);
   //     notification.error({
   //       message: err.message,
   //       description: "Please try it again later !",
@@ -289,8 +238,8 @@ export default function Register() {
         return;
       }
       setIsLoadingEmail(true);
-      const result = await checkUserEmail(email);
-      if (result.fail) {
+      const result = await getUser();
+      if (result.success === false) {
         notification.error({
           message: "Error when fetching !",
           description: result.message,
@@ -300,8 +249,8 @@ export default function Register() {
         setIsLoadingEmail(false);
         return;
       }
-      // const newResult = result.data.find((item) => email === item.email);
-      if (!result.success) {
+      const newResult = result.data.find((item) => email === item.email);
+      if (newResult) {
         setEmailNoti("Email already exist ! Please try another one");
         updateSaveState("email", "unique", false);
         setIsLoadingEmail(false);
@@ -325,6 +274,56 @@ export default function Register() {
       });
     }
   };
+
+  // const handleBlurOnEmail = async () => {
+  //   try {
+  //     if (email === "") {
+  //       setEmailNoti("Cannot leave this field blank !");
+  //       updateSaveState("email", "notBlank", false);
+  //       return;
+  //     }
+  //     if (!emailRegex.test(email)) {
+  //       setEmailNoti("Invalid Email Format !");
+  //       updateSaveState("email", "isValid", false);
+  //       return;
+  //     }
+  //     setIsLoadingEmail(true);
+  //     const result = await checkUserEmail(email);
+  //     if (result.fail) {
+  //       notification.error({
+  //         message: "Error when fetching !",
+  //         description: result.message,
+  //         placement: "topRight",
+  //         duration: 1.5,
+  //       });
+  //       setIsLoadingEmail(false);
+  //       return;
+  //     }
+  //     // const newResult = result.data.find((item) => email === item.email);
+  //     if (!result.success) {
+  //       setEmailNoti("Email already exist ! Please try another one");
+  //       updateSaveState("email", "unique", false);
+  //       setIsLoadingEmail(false);
+  //       setStateForEmailIcon(false);
+  //     } else {
+  //       updateSaveState("email", "notBlank", true);
+  //       updateSaveState("email", "isValid", true);
+  //       updateSaveState("email", "unique", true);
+  //       setEmailNoti("---");
+  //       setIsLoadingEmail(false);
+  //       setStateForEmailIcon(true);
+  //     }
+  //   } catch (err) {
+  //     setIsLoadingEmail(false);
+  //     setStateForEmailIcon(false);
+  //     notification.error({
+  //       message: err.message,
+  //       description: "Please try it again later !",
+  //       placement: "topRight",
+  //       duration: 1.5,
+  //     });
+  //   }
+  // };
 
   const onTypingPassWord = () => {
     if (password === "") {
