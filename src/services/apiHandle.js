@@ -1,9 +1,10 @@
 // const apiKey = import.meta.env.VITE_APP_SECRET_KEY;
 const apiKey = "677fa32d3b77870627c596d5";
+const apiUrl = "https://mindx-mockup-server.vercel.app"
 
 const getUser = async () => {
   try {
-    const url = await `/api/resources/users?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/users?apiKey=${apiKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -17,7 +18,7 @@ const getUser = async () => {
 
 const updateUser = async (id, user) => {
   try {
-    const url = `/api/resources/users/${id}?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/users/${id}?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "PUT",
       body: JSON.stringify(user),
@@ -34,7 +35,7 @@ const updateUser = async (id, user) => {
 
 const insertNote = async (note) => {
   try {
-    const url = `/api/resources/Note?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/Note?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(note),
@@ -51,7 +52,7 @@ const insertNote = async (note) => {
 
 const getNote = async () => {
   try {
-    const url = `/api/resources/Note?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/Note?apiKey=${apiKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -65,7 +66,7 @@ const getNote = async () => {
 
 const updateNote = async (id, note) => {
   try {
-    const url = `/api/resources/Note/${id}?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/Note/${id}?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "PUT",
       body: JSON.stringify(note),
@@ -82,7 +83,7 @@ const updateNote = async (id, note) => {
 
 const deleteNote = async (id) => {
   try {
-    const url = `/api/resources/Note/${id}?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/Note/${id}?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "DELETE",
     });
@@ -98,7 +99,7 @@ const deleteNote = async (id) => {
 
 const getDepartment = async () => {
   try {
-    const url = `/api/resources/department?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/department?apiKey=${apiKey}`;
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -113,7 +114,7 @@ const getDepartment = async () => {
 
 const updateDepartment = async (id, item) => {
   try {
-    const url = `/api/resources/department/${id}?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/department/${id}?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "PUT",
       body: JSON.stringify(item),
@@ -129,7 +130,7 @@ const updateDepartment = async (id, item) => {
 };
 const addUser = async (user) => {
   try {
-    const url = `/api/resources/users?apiKey=${apiKey}`;
+    const url = `${apiUrl}/resources/users?apiKey=${apiKey}`;
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(user),
