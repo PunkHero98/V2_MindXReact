@@ -1,4 +1,5 @@
-const apiKey = import.meta.env.VITE_APP_SECRET_KEY;
+// const apiKey = import.meta.env.VITE_APP_SECRET_KEY;
+const apiKey = "677fa32d3b77870627c596d5";
 
 const getUser = async () => {
   try {
