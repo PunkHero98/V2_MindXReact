@@ -1,5 +1,5 @@
 .scroll-container {
-    max-height: 600px;
+    /* max-height: 600px; */
     overflow-y: auto; /* Cho phép cuộn */
     -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
     scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
@@ -8,4 +8,10 @@
   .scroll-container::-webkit-scrollbar {
     display: none; /* Ẩn thanh cuộn trên Chrome, Edge, Safari */
   }
-  
+
+.user_container {
+  max-height: 400px;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

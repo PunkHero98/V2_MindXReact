@@ -2,8 +2,9 @@ import { useDispatch } from "react-redux";
 import { login } from "../../features/auth/Login";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { getUser } from "../../services/apiHandle";
+import { getUser, updateUser } from "../../services/apiHandle";
 import { Button, Input, notification, Checkbox, Divider } from "antd";
+import { nanoid } from "nanoid";
 import {
   EyeInvisibleOutlined,
   EyeTwoTone,
@@ -45,6 +46,60 @@ export default function Login() {
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
     // setTargetChecked(e.target.checked);
+  };
+
+  const handleUpdateUserAfterLogin = async (id , user) => {
+    try {
+      const sessionID = nanoid(30);
+      const expiryTime = Date.now() + 24 * 60 * 60 * 1000;
+      user.sessionID = sessionID;
+      const result = await updateUser(id , user);
+      if (result.success === false) {
+        notification.error({
+          message: "Error when fetching",
+          description: result.message,
+          placement: "topRight",
+          duration: 1.5,
+        });
+        setIsLoading(false);
+        return;
+      }
+      localStorage.setItem("sessionID", sessionID);
+      localStorage.setItem("sessionExpiry", expiryTime);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      const userss = {
+        user_id: user["_id"],
+        username: user.username,
+        department: user.department,
+        img_url: user.img_url || null,
+        role: user.role,
+      };
+      saveToReduxAndRedirect(userss);
+      // if(tartgetChecked){
+      //   localStorage.setItem("currentUser", JSON.stringify(userss));
+      // }
+      // const selectUser = await handleDepartment(user.department);
+      // localStorage.setItem("selectUser", JSON.stringify(selectUser));
+      setIsLoading(false);
+      notification.success({
+        message: "Login Successful",
+        description: "You have logged in successfully!",
+        placement: "topRight",
+        duration: 1.5,
+      });
+    } 
+    catch (err) 
+    {
+      notification.error({
+        message: err.message,
+        description: "Please try it again later !",
+        placement: "topRight",
+        duration: 1.5,
+      });
+    }
   };
 
   const checkLogin = async () => {
@@ -97,29 +152,7 @@ export default function Login() {
             setIsLoading(false);
             return;
           } else {
-            setTimeout(() => {
-              navigate("/");
-            }, 1000);
-            const userss = {
-              user_id: user["_id"],
-              username: user.username,
-              department: user.department,
-              img_url: user.img_url || null,
-              role: user.role,
-            };
-            saveToReduxAndRedirect(userss);
-            // if(tartgetChecked){
-            //   localStorage.setItem("currentUser", JSON.stringify(userss));
-            // }
-            // const selectUser = await handleDepartment(user.department);
-            // localStorage.setItem("selectUser", JSON.stringify(selectUser));
-            setIsLoading(false);
-            notification.success({
-              message: "Login Successful",
-              description: "You have logged in successfully!",
-              placement: "topRight",
-              duration: 1.5,
-            });
+            handleUpdateUserAfterLogin(user["_id"], user);
             return;
           }
         } else {

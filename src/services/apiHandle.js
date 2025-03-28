@@ -153,6 +153,36 @@ const addUser = async (user) => {
     return { success: false, message: err.message };
   }
 };
+
+const addConversation = async (conversation) => {
+  try {
+    const url = `/api/resources/conversations?apiKey=${apiKey}`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(conversation),
+    });
+    if (!response.ok) {
+      return { success: false, message: "Network response was not ok" };
+    }
+    const data = await response.json();
+    return { success: true, data: data.data };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+};
+const getAllConversations = async () => {
+  try {
+    const url = `/api/resources/conversations?apiKey=${apiKey}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      return { success: false, message: "Network response was not ok" };
+    }
+    const data = await response.json();
+    return { success: true, data: data.data.data };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+}
 export {
   getUser,
   insertNote,
@@ -163,4 +193,6 @@ export {
   addUser,
   updateDepartment,
   updateUser,
+  addConversation,
+  getAllConversations
 };

@@ -13,7 +13,9 @@ const authSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state) => {
-      state.user = null;
+      localStorage.removeItem("sessionID");
+      localStorage.removeItem("sessionExpiry");
+      state.user = "logged_out";
     },
   },
 });

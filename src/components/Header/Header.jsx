@@ -48,7 +48,7 @@ const Header = () => {
 
   const itemsForMem = [
     {
-      label: <Link to={`/account/${user.user_id}`}>Account</Link>,
+      label: <Link to={`/account/${user?._id || ""}`}>Account</Link>,
       key: "0",
     },
     {
@@ -62,7 +62,7 @@ const Header = () => {
 
   const itemsForAdd = [
     {
-      label: <Link to={`/account/${user.user_id}`}>Account</Link>,
+      label: <Link to={`/account/${user?._id || ""}`}>Account</Link>,
       key: "0",
     },
     {
