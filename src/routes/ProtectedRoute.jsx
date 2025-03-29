@@ -18,7 +18,17 @@ const ProtectedRoute = ({ children }) => {
 
   const checkSessionID = async () => {
     const sessionID = localStorage.getItem("sessionID");
+    const sessionExpiry = localStorage.getItem("sessionExpiry");
 
+    if (sessionExpiry && !isNaN(new Date(sessionExpiry).getTime()) && new Date(sessionExpiry) < new Date()) {
+      
+      setIsCheckingSession(false);
+      setIsSessionValid(false);
+      localStorage.removeItem("sessionID");
+      localStorage.removeItem("sessionExpiry");
+      return;
+    }
+    
     if (!sessionID) {
       setIsCheckingSession(false);
       setIsSessionValid(false);
@@ -64,7 +74,12 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     if (!user) {
       checkSessionID();
-    } else {
+    } else if (user === "logged_out") {
+      setIsCheckingSession(false);
+      setIsSessionValid(false);
+      localStorage.removeItem("sessionID");
+      localStorage.removeItem("sessionExpiry");
+    }else{
       setIsCheckingSession(false);
       setIsSessionValid(true);
     }

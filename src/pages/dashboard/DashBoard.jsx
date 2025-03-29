@@ -24,6 +24,7 @@ const DashBoard = () => {
     ],
   };
 
+  
   const options = {
     responsive: true,
     plugins: {
